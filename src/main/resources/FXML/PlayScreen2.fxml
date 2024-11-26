@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="PlayScreen2" fx:id="ps2Root">
+    <top>
+        <MenuBar>
+            <Menu text="Options">
+                <MenuItem text="Fresh Start" onAction="#freshStart" fx:id="restartOption"/>
+                <MenuItem text="New Look" onAction="#newLook"/>
+                <MenuItem text="Exit" onAction="#exitGame" fx:id="exitOption"/>
+            </Menu>
+        </MenuBar>
+    </top>
+
+    <center>
+        <Pane>
+        <!-- Top section for Dealer -->
+        <VBox alignment="CENTER" spacing="10" layoutX="300" layoutY="0">
+            <Label text="Dealer" fx:id="dealerLabel"/>
+            <HBox alignment="CENTER" spacing="5">
+                <Button fx:id="card7" styleClass="card-button" disable="true"/>
+                <Button fx:id="card8" styleClass="card-button" disable="true"/>
+                <Button fx:id="card9" styleClass="card-button" disable="true"/>
+            </HBox>
+        </VBox>
+        <TextArea fx:id="chatLog" editable="false" wrapText="true" layoutX="700" layoutY="0"/>
+        </Pane>
+    </center>
+
+    <bottom>
+        <Pane>
+            <!-- Bottom Left section for Player 1 -->
+            <VBox alignment="CENTER" spacing="10" layoutX="50"> 
+                <HBox alignment="CENTER" spacing="5"> 
+                    <Button fx:id="playHand1" text="Play" onAction="#playAction1"/>
+                    <Button fx:id="foldHand1" text="Fold" onAction="#foldAction1"/>
+                </HBox>
+                <HBox alignment="CENTER" spacing="5">
+                    <Button fx:id="card1" styleClass="card-button" disable="true"/>
+                    <Button fx:id="card2" styleClass="card-button" disable="true"/>
+                    <Button fx:id="card3" styleClass="card-button" disable="true"/>
+                </HBox>
+                <Label fx:id="player1TW"/>
+            </VBox>
+            
+            <!-- Bottom Right section for Player 2 -->
+            <VBox alignment="CENTER" spacing="10" layoutX="560">
+                <HBox alignment="CENTER" spacing="5"> 
+                    <Button fx:id="playHand2" text="Play" onAction="#playAction2"/>
+                    <Button fx:id="foldHand2" text="Fold" onAction="#foldAction2"/>
+                </HBox>
+                <HBox alignment="CENTER" spacing="5">
+                    <Button fx:id="card4" styleClass="card-button" disable="true"/>
+                    <Button fx:id="card5" styleClass="card-button" disable="true"/>
+                    <Button fx:id="card6" styleClass="card-button" disable="true"/>
+                </HBox>
+                <Label fx:id="player2TW"/>
+            </VBox>
+        </Pane>
+    </bottom>
+</BorderPane>

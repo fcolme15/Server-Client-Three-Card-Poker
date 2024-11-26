@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Slider?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="PlayScreen1" fx:id="ps1Root">
+    <top>
+        <MenuBar >
+            <Menu  text="Options">
+                <MenuItem text="Fresh Start" onAction="#freshStart" fx:id="restartOption"/>
+                <MenuItem text="New Look" onAction="#newLook"/>
+                <MenuItem text="Exit" onAction="#exitGame" fx:id="exitOption"/>
+            </Menu>
+        </MenuBar>
+    </top>
+
+    <center>
+        <Pane>
+            <!-- Top section for Dealer -->
+            <VBox layoutX="422.5" layoutY="0">
+                <VBox alignment="CENTER" spacing="10">
+                    <Label text="Dealer" fx:id="dealerLabel"/>
+                    <HBox alignment="CENTER" spacing="5">
+                        <Button fx:id="deckCard" styleClass="card-button" disable="true"/>
+                    </HBox>
+                    <!-- Add dealer-specific components here, like dealer's hand display -->
+                </VBox>
+            </VBox>
+            <TextArea fx:id="chatLog" editable="false" wrapText="true" layoutX="700" layoutY="0"/>
+        </Pane>
+    </center>
+
+    <bottom>
+        <Pane>
+            <!-- Bottom Left section for Player 1 -->
+            <VBox alignment="BOTTOM_CENTER" spacing="10" layoutX="75"> 
+                <Button fx:id="player1Lock" text="Lock Bet" onAction="#lockBet1"/>
+                <HBox alignment="BOTTOM_CENTER" spacing="5">
+                    <VBox alignment="CENTER">
+                        <Label fx:id="displayAnte1" styleClass="slider-text"/>
+                        <Slider fx:id="player1Ante" maxHeight="40"  maxWidth="100"/>
+                        <Label text="Ante" styleClass="slider-text"/>
+                    </VBox>
+                    <VBox alignment="CENTER">
+                        <Label fx:id="displayPP1" styleClass="slider-text"/>
+                        <Slider fx:id="player1PP" maxHeight="40"  maxWidth="100"/>
+                        <Label text="Pair Plus" styleClass="slider-text"/>
+                    </VBox>
+                    <Button fx:id="noPP1" text="No PP" onAction="#ppAction1"/>
+                </HBox>
+                <Label fx:id="player1TW"/>
+            </VBox>
+            
+            <!-- Bottom Right section for Player 2 -->
+            <VBox alignment="BOTTOM_CENTER" spacing="10" layoutX="585.5">
+                <Button fx:id="player2Lock" text="Lock Bet" onAction="#lockBet2"/>
+                <HBox alignment="BOTTOM_CENTER" spacing="5">
+                    <VBox alignment="CENTER">
+                        <Label fx:id="displayAnte2" styleClass="slider-text"/>
+                        <Slider fx:id="player2Ante" maxHeight="40"  maxWidth="100"/>
+                        <Label fx:id="anteText" text="Ante" styleClass="slider-text"/>
+                    </VBox>
+                    <VBox alignment="CENTER">
+                        <Label fx:id="displayPP2" styleClass="slider-text"/>
+                        <Slider fx:id="player2PP" maxHeight="40"  maxWidth="100"/>
+                        <Label text="Pair Plus" styleClass="slider-text"/>
+                    </VBox>
+                    <Button fx:id="noPP2" text="No PP" onAction="#ppAction2"/>
+                </HBox>
+                <Label fx:id="player2TW"/>
+            </VBox>
+        </Pane>
+    </bottom>
+</BorderPane>

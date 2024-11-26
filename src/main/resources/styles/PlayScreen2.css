@@ -1,0 +1,132 @@
+/*****************************************/
+/*              GENERAL CSS              */
+/*****************************************/
+#ps1Root, #ps2Root
+{
+    -fx-padding: 0; /* Adjust this to control spacing */
+    -fx-spacing: 20;
+    -fx-background-color: #2a6891;
+}
+
+/* MenuBar styling */
+.menu-bar 
+{
+    -fx-background-color: #b5b3b3;
+    -fx-text-base-color: rgb(0, 0, 0); /* Black text */
+}
+.menu:hover 
+{
+    -fx-background-color: #c5c4c4;
+}
+.menu-item:hover
+{
+    -fx-background-color: #828282;
+}
+
+/* Dealer area + Player winnings styling */
+#dealerLabel, #player1TW, #player2TW 
+{
+    -fx-font-size: 24px; /* Font size for dealer label */
+    -fx-font-weight: bold; /* Bold text */
+
+    -fx-text-fill: #083207;
+    /*-fx-text-fill: #052904; !* Dark gray text *!*/
+
+    -fx-alignment: center; /* Center the label */
+}
+
+#chatLog
+{
+    -fx-focus-color: transparent;
+    -fx-text-box-border: transparent;
+    -fx-control-inner-background:transparent; /* Inner area background */
+    -fx-background-insets: 0;                /* Removes insets/margins around the background */
+    -fx-text-fill: #2a6891;                    /* Sets text color */
+    -fx-font-size: 14px;                     /* Optional: Sets font size */
+    -fx-pref-width: 300px;
+}
+
+/* Button styling */
+.button 
+{
+    -fx-background-color: #083207; /* Blue background */
+    -fx-text-fill: white; /* White text */
+    -fx-font-size: 16px; /* Font size */
+    -fx-padding: 10; /* Padding around the button */
+    -fx-background-radius: 5; /* Rounded corners */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0.0, 0, 1); /* Drop shadow effect */
+    -fx-pref-width: 125px;
+}
+
+/* Hover effect for buttons */
+.button:hover 
+{
+    -fx-background-color: #0b600e; /* Darker blue on hover */
+}
+
+/*****************************************/
+/*          PlayScreen1 SPECIFIC         */
+/*****************************************/
+
+/* Root styling for the slider */
+.slider {
+    -fx-padding: 5; /* Minimal padding */
+}
+
+/* Track styling */
+.slider .track {
+    -fx-background-color: #2d2d2d; /* Dark gray track background */
+    -fx-background-radius: 3; /* Slightly rounded track edges */
+    -fx-pref-height: 4px; /* Thinner track height */
+}
+
+/* Highlighted track (portion up to the thumb) */
+.slider .track .highlight {
+    -fx-background-color: #4a4a4a; /* Slightly lighter gray for highlight */
+    -fx-background-radius: 3; /* Matches track radius */
+}
+
+/* Thumb (handle) styling */
+.slider .thumb {
+    -fx-background-color: #8a8a8a; /* Medium gray thumb */
+    -fx-background-radius: 6; /* Slightly rounded thumb */
+    -fx-pref-width: 12px; /* Smaller width of the thumb */
+    -fx-pref-height: 12px; /* Smaller height of the thumb */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 4, 0.0, 0, 1); /* Softer shadow */
+    -fx-border-color: #5c5c5c; /* Slightly darker gray border */
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
+
+/* Hover effect for the thumb */
+.slider .thumb:hover {
+    -fx-background-color: #b0b0b0; /* Lighter gray on hover */
+    -fx-cursor: hand; /* Shows hand cursor on hover */
+}
+
+/* for slider text */
+.slider-text
+{
+    -fx-fontweight: bold;
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+    -fx-padding: -3px;
+}
+
+/*****************************************/
+/*          PlayScreen2 SPECIFIC         */
+/*****************************************/
+/* Card button specific styling */
+.card-button 
+{
+    -fx-background-color: transparent; /* Gold background for cards */
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    -fx-padding: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0.0, 0, 1);
+    -fx-opacity: 1;
+    -fx-pref-width: 125px;
+    -fx-pref-height: 200px;
+    -fx-wrap-text: true;
+}
