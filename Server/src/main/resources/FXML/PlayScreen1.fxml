@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ListView?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="PlayScreen1" fx:id="ps1Root">
+    <top>
+        <MenuBar>
+            <Menu text="Options">
+                <MenuItem text="New Look" onAction="#newLook"/>
+                <MenuItem text="Exit" onAction="#exitServer" fx:id="exitOption"/>
+            </Menu>
+        </MenuBar>
+    </top>
+
+    <center>
+        <VBox layoutX="300" layoutY="0">
+            <Pane>
+                <!-- Top section for Dealer -->
+                <VBox alignment="CENTER" spacing="10" layoutX="300" layoutY="0">
+                    <Label text="Server" fx:id="titleLabel"/>
+                </VBox>
+                <Button fx:id="numClients" layoutX="600" layoutY="0"/>
+            </Pane>
+
+            <Pane>
+                <HBox spacing="100">
+                    <VBox alignment="CENTER" spacing="10" layoutX="300" layoutY="300">
+                        <Label text="Stats" fx:id="statsLabel"/>
+                        <ListView fx:id="statsList"/>
+                    </VBox>
+
+                    <VBox alignment="CENTER" spacing="10" layoutX="300" layoutY="300">
+                        <Label text="Client" fx:id="clientLabel"/>
+                        <ListView fx:id="clientList"/>
+                    </VBox>
+                </HBox>
+
+            </Pane>
+        </VBox>
+    </center>
+
+</BorderPane>

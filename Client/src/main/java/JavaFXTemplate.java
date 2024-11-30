@@ -111,7 +111,7 @@ public class JavaFXTemplate extends Application {
 	// 	theDealer = gameData.getDealer();
 	// 	player1TW.setText(player1TW.getText() + Integer.toString(playerOne.getTotalWinnings()));
 	// 	player2TW.setText(player2TW.getText() + Integer.toString(playerTwo.getTotalWinnings()));
-    //     // gsRoot.getStylesheets().add("/styles/PlayScreen1.css");
+    //     // gsRoot.getStylesheets().add("/styles/PlayScreen1S.css");
     //     // TODO Auto-generated method stub
     // }
 
@@ -121,7 +121,7 @@ public class JavaFXTemplate extends Application {
     //     FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/PlayScreen2.fxml"));
     //     Parent ps2Root = loader.load(); //load view into parent
 
-	// 	ps2Root.getStylesheets().add("/styles/PlayScreen1.css");
+	// 	ps2Root.getStylesheets().add("/styles/PlayScreen1S.css");
     //     gsRoot.getScene().setRoot(ps2Root);//update scene graph
     // }
 
@@ -165,10 +165,10 @@ public class JavaFXTemplate extends Application {
 
     // @FXML
     // public void exitGame() throws IOException {
-    //     FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ExitScreen.fxml"));
+    //     FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ExitScreenServer.fxml"));
     //     Parent exitRoot = loader.load(); //load view into parent
 
-	// 	exitRoot.getStylesheets().add("/styles/WelcomeScreen.css");
+	// 	exitRoot.getStylesheets().add("/styles/WelcomeScreenServer.css");
     //     gsRoot.getScene().setRoot(exitRoot);//update scene graph
     // }
 }
