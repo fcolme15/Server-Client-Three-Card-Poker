@@ -26,7 +26,7 @@
             <Label text="Server Side" id="serverLabel"/>
 
             <TextField fx:id="portNum" promptText="Port Number" id="portNum"/>
-            <Button fx:id="button1" text="Start Server" onAction="#startServer"/>
+            <Button fx:id="button1" text="Start Server" onAction="#toServer"/>
             <Button fx:id="button2" text="Exit Server" onAction="#exitServer"/>
         </VBox>
     </center>

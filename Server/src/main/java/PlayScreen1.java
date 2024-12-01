@@ -55,7 +55,7 @@ public class PlayScreen1 implements Initializable{
     @Override
     //public void initialize() {
     public void initialize(URL location, ResourceBundle resources) {
-
+        gameData.setGameState(0);
         //numClients.setEditable(false);
 
     }
@@ -80,7 +80,7 @@ public class PlayScreen1 implements Initializable{
     @FXML
     public void freshStart() throws IOException {
         gameData.resetGame();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/PlayScreen1.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ServerScreen.fxml"));
         Parent resetRoot = loader.load(); //load view into parent
         ps1Root.getScene().setRoot(resetRoot);//update scene graph
     }

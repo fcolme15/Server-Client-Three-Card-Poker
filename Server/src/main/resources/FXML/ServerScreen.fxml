@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="PlayScreen1" fx:id="ps1Root">
+    <top>
+        <MenuBar>
+            <Menu text="Options">
+                <MenuItem text="New Look" onAction="#newLook"/>
+                <MenuItem text="Exit" onAction="#exitServer"/>
+            </Menu>
+        </MenuBar>
+    </top>
+
+    <center>
+        <!-- Outer Pane for absolute positioning -->
+<!--        <Pane prefWidth="600" prefHeight="400">-->
+        <Pane>
+            <!-- TitleLabel (centered at the top) -->
+            <Label text="Server" fx:id="titleLabel" layoutX="450" layoutY="10"/>
+
+            <!-- NumClients Button (top-right corner) -->
+            <Button fx:id="numClients" text="Num Clients" layoutX="800" layoutY="10"/>
+
+            <!-- Stats and Client sections positioned below -->
+<!--            <Pane layoutX="150" layoutY="100" prefWidth="300" prefHeight="200">-->
+            <Pane layoutX="150" layoutY="100" >
+                <HBox spacing="100" layoutX="50" layoutY="50">
+                    <!-- Stats section -->
+                    <VBox alignment="CENTER" spacing="10">
+                        <Label text="Game Stats" fx:id="statsLabel"/>
+                        <ListView fx:id="statsList"/>
+                    </VBox>
+
+                    <!-- Client section -->
+                    <VBox alignment="CENTER" spacing="10">
+                        <Label text="Client Log" fx:id="clientLabel"/>
+                        <ListView fx:id="clientList"/>
+                    </VBox>
+                </HBox>
+            </Pane>
+        </Pane>
+    </center>
+
+</BorderPane>

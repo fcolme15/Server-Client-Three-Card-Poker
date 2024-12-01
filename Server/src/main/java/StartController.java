@@ -61,51 +61,28 @@ public class StartController implements Initializable{
 //        });
 
         //Filter for text field portNum to only accept numbers
-        UnaryOperator<Change> NumberFilter = change -> {
-            String newtxt = change.getControlNewText();
-            String textused = change.getText();
-
-            if (newtxt.matches("\\d*")) {
-                return change;
-            } else {
-                return null;
-            }
-        };
-
-        //Formatter for text field portNum to only accept numbers
-        TextFormatter<String> NumberFormatter = new TextFormatter<>(NumberFilter);
-        portNum.setTextFormatter(NumberFormatter);
+//        UnaryOperator<Change> NumberFilter = change -> {
+//            String newtxt = change.getControlNewText();
+//            String textused = change.getText();
+//
+//            if (newtxt.matches("\\d*")) {
+//                return change;
+//            } else {
+//                return null;
+//            }
+//        };
+//
+//        //Formatter for text field portNum to only accept numbers
+//        TextFormatter<String> NumberFormatter = new TextFormatter<>(NumberFilter);
+//        portNum.setTextFormatter(NumberFormatter);
     }
 
-    public void startServer(ActionEvent e) throws IOException {
-        //get instance of the loader class
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/PlayScreen1.fxml"));
+    public void toServer(ActionEvent e) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ServerScreen.fxml"));
         Parent ps1Root = loader.load(); //load view into parent
 
         ps1Root.getStylesheets().add(GameData.getInstance().getStyle(1));
         ssRoot.getScene().setRoot(ps1Root);//update scene graph
-    }
-
-    public void returnToServer(ActionEvent e) throws IOException {
-        String playScreen;
-        switch(GameData.getInstance().getGameState()) {
-            case 0: 
-                playScreen = "/FXML/PlayScreen1.fxml";
-                break;
-            case 1: 
-                playScreen = "/FXML/PlayScreen2.fxml";
-                break;
-            default:
-                //its actually broken if this executes somehow
-                throw new IOException("bruh you broke it");
-        }
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(playScreen));
-        Parent psRoot = loader.load(); //load view into parent
-
-        psRoot.getStylesheets().add(GameData.getInstance().getStyle(1));
-        ssRoot.getScene().setRoot(psRoot);//update scene graph
     }
 
     //Sets loader with start screen fxml
