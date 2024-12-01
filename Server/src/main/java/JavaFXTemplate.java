@@ -53,7 +53,7 @@ public class JavaFXTemplate extends Application {
 			Scene s1 = new Scene(root, 1000, 800);
 			s1.getStylesheets().add("/styles/WelcomeScreen.css");
 			
-			primaryStage.setTitle("Three Card Poker");
+			primaryStage.setTitle("Three Card Poker Server");
 			primaryStage.setScene(s1);
 			primaryStage.show();
 		}
