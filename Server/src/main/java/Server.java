@@ -23,6 +23,8 @@ public class Server {
     private int port;
     private PokerInfo gamedata;
 
+
+
     private Server(Consumer<Serializable> call, int portNum) 
     {
         port = portNum;
@@ -89,7 +91,7 @@ public class Server {
             out = new ObjectOutputStream(connection.getOutputStream());
             System.out.println("yay okay client thread created");
         }
-    
+
         public void run() 
         {
             System.out.println("in runnnnn in client thread");
@@ -110,6 +112,7 @@ public class Server {
 
                     switch(data.getGameState())
                     {
+                        //    11 -> Server deals player's hand
                         case 11: 
                         {
                             System.out.println("IN CASE 11");
@@ -118,8 +121,13 @@ public class Server {
 
                             out.writeObject(data);
                             out.flush();
+
+                            realClientList.addAll("A new game is being played");
+                            clientList.setItems(realClientList);
+
                             break;
                         }
+                        //    13 -> Server deals Dealer's hand
                         case 13:
                         {
                             System.out.println("IN CASE 13");
@@ -130,6 +138,7 @@ public class Server {
                             out.flush();
                             break;
                         }
+                        //    15 -> Server evaluates hands
                         case 15:
                         {
                             System.out.println("IN CASE 15");
@@ -141,6 +150,7 @@ public class Server {
                             out.flush();
                             break;
                         }
+                        //    17 -> Server nulls dealer's hand
                         case 17:
                         {
                             System.out.println("IN CASE 17");
@@ -152,10 +162,10 @@ public class Server {
                             break;
                         }
                         default:
-                            System.out.println("OKAY YOU BROKE IT");
+                            System.out.println("OKAY James BROKE IT");
                     }
 
-                    //game logic here
+                    /*GAME LOGIC*/
                     Platform.runLater(() -> { realClientList.addAll(
                         "Player " + count + "'s ante bet: " + anteBetString); });
                 }
