@@ -152,7 +152,7 @@ public class PlayScreen1 implements Initializable{
         System.out.println("AFTER GS 12 LOOP");
         gameData.getPlayerOne().setHand(playerOne.getHand());
 
-        // playerOne.setHand(theDealer.dealHand()); //TODO: move to server
+        // playerOne.setHand(theDealer.dealHand()); // move to server instead
         //only switch screens if other player has also locked bet
 
         loadPS2();
@@ -221,8 +221,8 @@ public class PlayScreen1 implements Initializable{
         deckCard.setGraphic(c1Img);
         
         //update total winnings display
-        if(playerOne.getTotalWinnings() >= 0) player1TW.setText("Player 1 Total Winnings: $" + Integer.toString(playerOne.getTotalWinnings()));
-        else player1TW.setText("Player 1 Total Winnings: -$" + Integer.toString(playerOne.getTotalWinnings()*-1));
+        if(playerOne.getTotalWinnings() >= 0) player1TW.setText("Total Winnings: $" + Integer.toString(playerOne.getTotalWinnings()));
+        else player1TW.setText("Total Winnings: -$" + Integer.toString(playerOne.getTotalWinnings()*-1));
 
         //update chat
         chatLog.clear();

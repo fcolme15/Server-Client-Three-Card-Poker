@@ -42,7 +42,6 @@ public class PlayScreen2 implements Initializable{
     @FXML
     private Button card9;
 
-    // private static boolean playedHand1 = false; //status of whether player played hand or not
 	@FXML
     private Label player1TW;
     @FXML
@@ -64,6 +63,11 @@ public class PlayScreen2 implements Initializable{
     @FXML
     private MenuItem restartOption;
 
+    @FXML
+    private Button playAgainButton;
+    @FXML
+    private Button exitButton;
+
 	@Override
     public void initialize(URL location, ResourceBundle resources) {
         gameData.setGameState(1);
@@ -75,7 +79,12 @@ public class PlayScreen2 implements Initializable{
         // System.out.print(playerOne.getHand().get(0).getSuit());
         // System.out.println(playerOne.getHand().get(0).getValue());
 
+        System.out.println("PLAYER 1 ANTE" + playerOne.getAnteBet());
+        System.out.println("PLAYER 1 PP" + playerOne.getPairPlusBet());
+
         //always update UI in case we return from game from options
+        playAgainButton.setVisible(false);
+        exitButton.setVisible(false);
         updateUI();
     }
     
@@ -139,7 +148,6 @@ public class PlayScreen2 implements Initializable{
         evalHandsPause.setOnFinished( e -> {
             //settle winnings, update UI/chat, and go back to PlayScreen1
             chat.add("Turn " + gameData.addTurn() + ":");
-            // settlePlayerWinnings(playedHand1, playerOne, "Player"); TODO: MOVE TO SERVER
             gameData.setGameState(15);
             clientConnection.send(gameData);
             PokerInfo receivedInfo2 = PokerInfo.getInstance();
@@ -164,6 +172,7 @@ public class PlayScreen2 implements Initializable{
 
                     Queue<String> receivedChat = receivedInfo2.getChat();
                     gameData.setChat(receivedChat);
+                    chat = receivedChat;
 
                     gameData.setPlayedHand(receivedInfo2.getPlayedHand());
                 } 
@@ -194,10 +203,14 @@ public class PlayScreen2 implements Initializable{
             }
             System.out.println("AFTER GS 18 LOOP");
 
-            // playedHand1 = false;
             gameData.setPlayedHand(false);
-            try { loadPS1();} 
-            catch(Exception ex) { ex.printStackTrace(); System.exit(1); }
+
+            playAgainButton.setVisible(true);
+            exitButton.setVisible(true);
+
+            // MOVE LOGIC TO NEW BUTTONS playAgainButton or exitButton
+            // try { loadPS1(); } 
+            // catch(Exception ex) { ex.printStackTrace(); System.exit(1); }
         });
 
         flipDealerPause.play();
@@ -205,59 +218,13 @@ public class PlayScreen2 implements Initializable{
         transitionScene.play();
     }
 
-    //TODO: REAL EVALUATIONS HAPPENING HERE
-    // public void settlePlayerWinnings(boolean playedHand, Player p, String playerToString) 
-    // {
-    //     //Player played hand
-    //     if(playedHand)
-    //     {
-    //         //only settle ante if dealer's hand is valid
-    //         if(ThreeCardLogic.validDealerHand(theDealer.getDealersHand()))
-    //         {
-    //             switch(ThreeCardLogic.compareHands(theDealer.getDealersHand(), p.getHand())) 
-    //             {
-    //                 case 0: { //push
-    //                     chat.add(playerToString + " pushes against Dealer");
-    //                     break;
-    //                 }
-    //                 case 1: { //dealer wins
-    //                     chat.add(addDescription(1,p,playerToString));
-    //                     chat.add(playerToString + " loses $" + Integer.toString(p.getAnteBet()));
-    //                     p.setTotalWinnings(p.getTotalWinnings() - p.getAnteBet());
-    //                     break;
-    //                 }
-    //                 case 2: { //player wins
-    //                     chat.add(addDescription(0,p,playerToString));
-    //                     chat.add(playerToString + " wins $" + Integer.toString(p.getAnteBet()));
-    //                     p.setTotalWinnings(p.getTotalWinnings() + p.getAnteBet());
-    //                     break;
-    //                 }
-    //             }
-    //         }
-    //         else {chat.add(playerToString + " pushes. Dealer doesn't have at least Queen High");}
+    public void playAnother(ActionEvent e) 
+    {
+        try { loadPS1(); } 
+        catch(Exception ex) { ex.printStackTrace(); System.exit(1); }
+    }
 
-    //         //settle pair plus winnings regardless of dealer's hand
-    //         int ppWinnings = ThreeCardLogic.evalPPWinnings(p.getHand(), p.getPairPlusBet());
-    //         if(ppWinnings > 0) 
-    //         {
-    //             int handValue = ThreeCardLogic.evalHand(p.getHand());
-    //             chat.add(playerToString + " wins $" + Integer.toString(p.getPairPlusBet()) + " from Pair Plus with a " + handToString(handValue));
-    //             p.setTotalWinnings(p.getTotalWinnings() + ppWinnings);
-    //         }
-    //         else 
-    //         {
-    //             chat.add(playerToString + " loses $" + Integer.toString(p.getPairPlusBet()) + " from Pair Plus");
-    //             p.setTotalWinnings(p.getTotalWinnings() - ppWinnings);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         //otherwise, player one folded and must lose ante + pair plus (if made)
-    //         chat.add(playerToString + " folds and loses $" + Integer.toString(p.getAnteBet() + p.getPairPlusBet()));
-    //         p.setTotalWinnings(p.getTotalWinnings() - p.getAnteBet()); 
-    //         p.setTotalWinnings(p.getTotalWinnings() - p.getPairPlusBet());
-    //     }
-    // }
+    public void terminateGame(ActionEvent e) { System.exit(0); }
 
     public void loadPS1() throws IOException {
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
@@ -267,7 +234,7 @@ public class PlayScreen2 implements Initializable{
         ps1Root.getStylesheets().add(gameData.getStyle(1));
 
         pause.setOnFinished(e-> {
-                ps2Root.getScene().setRoot(ps1Root);//te scene graph
+                ps2Root.getScene().setRoot(ps1Root);//the scene graph
             }
         );
 

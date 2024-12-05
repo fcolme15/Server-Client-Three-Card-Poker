@@ -46,7 +46,7 @@
 /* Button styling */
 .button 
 {
-    -fx-background-color: #083207; /* Blue background */
+    -fx-background-color: #083207; 
     -fx-text-fill: white; /* White text */
     -fx-font-size: 16px; /* Font size */
     -fx-padding: 10; /* Padding around the button */
@@ -62,7 +62,7 @@
 }
 
 /*****************************************/
-/*          PlayScreen1 SPECIFIC         */
+/*          PlayScreen2 SPECIFIC         */
 /*****************************************/
 
 /* Root styling for the slider */
@@ -116,11 +116,18 @@
     -fx-background-color: transparent; /* Gold background for cards */
     -fx-text-fill: black;
     -fx-font-size: 14px;
-    -fx-padding: 10;
-    -fx-background-radius: 10;
+    -fx-padding: 10px;
+    -fx-background-radius: 10px;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0.0, 0, 1);
     -fx-opacity: 1;
     -fx-pref-width: 125px;
     -fx-pref-height: 200px;
     -fx-wrap-text: true;
+}
+
+.result-button
+{
+    -fx-padding: 10px;
+    -fx-pref-width: 300;
+    -fx-pref-height: 150px;
 }

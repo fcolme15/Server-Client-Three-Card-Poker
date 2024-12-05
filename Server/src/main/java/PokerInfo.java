@@ -16,6 +16,8 @@ public class PokerInfo implements Serializable {
     14 -> Client receives dealt dealer hand
     15 -> Server evaluates hands
     16 -> Client receives game results
+    17 -> Server nulls dealer's hand
+    18 -> Client receives null dealer hand
     */
     private int gameState; //used for determining which screen to go to when returning from exit screen
     private Player playerOne;
