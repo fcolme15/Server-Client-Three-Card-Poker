@@ -1,25 +1,27 @@
+import java.io.Serializable;
 import java.util.Queue;
 import java.util.LinkedList;
 
-public class GameData {
-    private static GameData gameData;
+public class PokerInfo implements Serializable {
+    private static PokerInfo gameData;
     private int gameState; //used for determining which screen to go to when returning from exit screen
     private Player playerOne;
-    private Player playerTwo;
+    private boolean playedHand;
     private Dealer theDealer;
     private String[] swapScreen;
-    private int state;
+    private int state; //used to keep track of CSS sheet on a given screen
 
     //chat properties
     private int numOfTurns;
-    private Queue<String> chat; //used to win/loss history\
+    private Queue<String> chat; //used to win/loss history
 
-    private GameData() {
+    private PokerInfo() {
         gameState = 0;
+
         playerOne = new Player();
-        playerTwo = new Player();
         theDealer = new Dealer();
 
+        playedHand = false;
         numOfTurns = 1;
         chat = new LinkedList<>();
         swapScreen = new String[4];
@@ -45,9 +47,9 @@ public class GameData {
         return swapScreen[state%2];
     }
 
-    public static GameData getInstance() {
+    public static PokerInfo getInstance() {
         if(gameData == null) {
-            gameData = new GameData();
+            gameData = new PokerInfo();
             return gameData;
         }
         return gameData;
@@ -57,12 +59,16 @@ public class GameData {
         return playerOne;
     }
 
-    public Player getPlayerTwo() {
-        return playerTwo;
-    }
-
     public Dealer getDealer() {
         return theDealer;
+    }
+
+    public boolean getPlayedHand() {
+        return playedHand;
+    }
+
+    public void setPlayedHand(boolean c) {
+        playedHand = c;
     }
 
     public int getGameState() {
@@ -93,10 +99,8 @@ public class GameData {
     public void resetGame() {
         gameState = 0;
         playerOne = new Player();
-        playerTwo = new Player();
         theDealer = new Dealer();
         numOfTurns = 1;
         chat.clear();
-        // state = 0;
     }
 }

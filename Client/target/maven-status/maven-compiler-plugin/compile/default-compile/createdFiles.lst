@@ -1,11 +1,12 @@
 StartController.class
 ThreeCardLogic.class
+PokerInfo.class
 PlayScreen1.class
 PlayScreen1$1.class
 Dealer.class
 PlayScreen2.class
-GameData.class
 Card.class
+Client.class
 Deck.class
 Player.class
 JavaFXTemplate.class

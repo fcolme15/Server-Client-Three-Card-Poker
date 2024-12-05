@@ -25,7 +25,13 @@ import javafx.scene.image.ImageView;
 //End of Images includes
 
 public class PlayScreen1 implements Initializable{
-    GameData gameData = GameData.getInstance();
+    //at this point client should already have connection to server so these can just be null and we'll get the right connection
+    Client clientConnection = Client.getInstance(null, 0, null); 
+
+    //BLOCKING OBJECT BEFORE TRANSITIONING TO NEW SCREEN IN lockBet()
+    private static final Object lock = new Object();
+
+    PokerInfo gameData = PokerInfo.getInstance();
     Player playerOne = gameData.getPlayerOne();
     Dealer theDealer = gameData.getDealer();
     Queue<String> chat = gameData.getChat();
@@ -122,9 +128,33 @@ public class PlayScreen1 implements Initializable{
         player1PP.setDisable(true);
         noPP1.setDisable(true);
         player1Lock.setVisible(false);
-        playerOne.setHand(theDealer.dealHand());
+        
+        //Let server know we need to get dealt hand
+        gameData.setGameState(11);
 
+        //send over gameData to Server to deal hands
+        clientConnection.send(gameData);
+        
+        //wait for response from the server
+        PokerInfo receivedInfo = PokerInfo.getInstance();
+        while(receivedInfo.getGameState() != 12)
+        {
+            System.out.println("IN GS 12 LOOP");
+            try
+            {
+                receivedInfo = (PokerInfo)clientConnection.in.readObject();
+                Deck receivedDeck = receivedInfo.getDealer().getTheDeck();
+                gameData.getDealer().setTheDeck(receivedDeck);
+                playerOne = receivedInfo.getPlayerOne();
+            } 
+            catch(Exception ex) { ex.toString(); }
+        }
+        System.out.println("AFTER GS 12 LOOP");
+        gameData.getPlayerOne().setHand(playerOne.getHand());
+
+        // playerOne.setHand(theDealer.dealHand()); //TODO: move to server
         //only switch screens if other player has also locked bet
+
         loadPS2();
     }
 
@@ -171,31 +201,6 @@ public class PlayScreen1 implements Initializable{
     /******************************************************/
     /*               Returning to Game State              */
     /******************************************************/
-
-    public void updateCards1(){
-        TranslateTransition translate = new TranslateTransition(Duration.seconds(1));
-        translate.setNode(c1Img);
-        translate.setToX(-150);
-        translate.setToY(450);
-        translate.play();
-
-//        String cardS2 = "bc.png";
-//        Image pic2 = new Image(cardS2);
-//        c2Img = new ImageView(pic2);
-//        c2Img.setFitHeight(150);
-//        c2Img.setFitWidth(150);
-//        c2Img.setPreserveRatio(true);
-//        deckCard.setGraphic(c2Img);
-    }
-
-    public void updateCards2(){
-        TranslateTransition translate = new TranslateTransition(Duration.seconds(1));
-        translate.setNode(c1Img);
-        translate.setToX(150);
-        translate.setToY(450);
-        translate.play();
-    }
-
     public void updateUI() {
         //update css
         ps1Root.getStylesheets().add(gameData.getStyle(1));

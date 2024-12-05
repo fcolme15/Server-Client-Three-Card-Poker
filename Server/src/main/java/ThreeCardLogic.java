@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Queue;
 
 public class ThreeCardLogic {
     public static int evalHand(ArrayList<Card> hand)  {
@@ -123,5 +124,96 @@ public class ThreeCardLogic {
             if(Collections.max(handVals) < 12) return false; //12 is Queen value
         }
         return true;
+    }
+
+    public static void settlePlayerWinnings(boolean playedHand, Player p, String playerToString, 
+                                        Dealer theDealer, Queue<String> chat) 
+    {
+        //Player played hand
+        if(playedHand)
+        {
+            //only settle ante if dealer's hand is valid
+            if(ThreeCardLogic.validDealerHand(theDealer.getDealersHand()))
+            {
+                switch(ThreeCardLogic.compareHands(theDealer.getDealersHand(), p.getHand())) 
+                {
+                    case 0: { //push
+                        chat.add(playerToString + " pushes against Dealer");
+                        break;
+                    }
+                    case 1: { //dealer wins
+                        chat.add(addDescription(1,p,playerToString, theDealer));
+                        chat.add(playerToString + " loses $" + Integer.toString(p.getAnteBet()));
+                        p.setTotalWinnings(p.getTotalWinnings() - p.getAnteBet());
+                        break;
+                    }
+                    case 2: { //player wins
+                        chat.add(addDescription(0,p,playerToString, theDealer));
+                        chat.add(playerToString + " wins $" + Integer.toString(p.getAnteBet()));
+                        p.setTotalWinnings(p.getTotalWinnings() + p.getAnteBet());
+                        break;
+                    }
+                }
+            }
+            else {chat.add(playerToString + " pushes. Dealer doesn't have at least Queen High");}
+
+            //settle pair plus winnings regardless of dealer's hand
+            int ppWinnings = ThreeCardLogic.evalPPWinnings(p.getHand(), p.getPairPlusBet());
+            if(ppWinnings > 0) 
+            {
+                int handValue = ThreeCardLogic.evalHand(p.getHand());
+                chat.add(playerToString + " wins $" + Integer.toString(p.getPairPlusBet()) + " from Pair Plus with a " + handToString(handValue));
+                p.setTotalWinnings(p.getTotalWinnings() + ppWinnings);
+            }
+            else 
+            {
+                chat.add(playerToString + " loses $" + Integer.toString(p.getPairPlusBet()) + " from Pair Plus");
+                p.setTotalWinnings(p.getTotalWinnings() - ppWinnings);
+            }
+        }
+        else
+        {
+            //otherwise, player one folded and must lose ante + pair plus (if made)
+            chat.add(playerToString + " folds and loses $" + Integer.toString(p.getAnteBet() + p.getPairPlusBet()));
+            p.setTotalWinnings(p.getTotalWinnings() - p.getAnteBet()); 
+            p.setTotalWinnings(p.getTotalWinnings() - p.getPairPlusBet());
+        }
+    }
+
+    public static String addDescription(int winner, Player p, String playerToString, Dealer theDealer){
+        String winnerString, winnerDescription, loserDescription;
+        int dealerValue = ThreeCardLogic.evalHand(theDealer.getDealersHand());
+        int playerValue = ThreeCardLogic.evalHand(p.getHand());
+        if (winner == 1){
+            winnerString = "Dealer";
+            winnerDescription = handToString(dealerValue);
+            loserDescription = handToString(playerValue);
+        }
+        else {
+            winnerString = playerToString;
+            winnerDescription = handToString(playerValue);
+            loserDescription = handToString(dealerValue);
+        }
+        if (playerValue == dealerValue){
+            return winnerString + " won the game with a High Card";
+        }
+        return winnerString + " won the game, " + winnerDescription + " beats " + loserDescription;
+    }
+
+    public static String handToString(int hand){
+        switch(hand){
+            case 1:
+                return "Straight Flush";
+            case 2:
+                return "Three of a Kind";
+            case 3:
+                return "Straight";
+            case 4:
+                return "Flush";
+            case 5:
+                return "Pair";
+            default:
+                return "High Card";
+        }
     }
 }

@@ -23,9 +23,10 @@ import javafx.scene.image.ImageView;
 //End of Images includes
 
 public class PlayScreen2 implements Initializable{
-    GameData gameData = GameData.getInstance();
+    //at this point client should already have connection to server so these can just be null and we'll get the right connection
+    Client clientConnection = Client.getInstance(null, 0, null); 
+    PokerInfo gameData = PokerInfo.getInstance();
     Player playerOne = gameData.getPlayerOne();
-    //Player playerTwo = gameData.getPlayerTwo();
     Dealer theDealer = gameData.getDealer();
     Queue<String> chat = gameData.getChat();
 
@@ -41,7 +42,7 @@ public class PlayScreen2 implements Initializable{
     @FXML
     private Button card9;
 
-    private static boolean playedHand1 = false; //status of whether player played hand or not
+    // private static boolean playedHand1 = false; //status of whether player played hand or not
 	@FXML
     private Label player1TW;
     @FXML
@@ -67,9 +68,13 @@ public class PlayScreen2 implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         gameData.setGameState(1);
 
-		gameData = GameData.getInstance();
+		gameData = PokerInfo.getInstance();
 		playerOne = gameData.getPlayerOne();
 		theDealer = gameData.getDealer();
+
+        // System.out.print(playerOne.getHand().get(0).getSuit());
+        // System.out.println(playerOne.getHand().get(0).getValue());
+
         //always update UI in case we return from game from options
         updateUI();
     }
@@ -79,7 +84,8 @@ public class PlayScreen2 implements Initializable{
         //discard hand and lose money
         playHand1.setVisible(false);
         foldHand1.setVisible(false);
-        playedHand1 = true;
+        // playedHand1 = true;
+        gameData.setPlayedHand(true);
         evalHands();
     }
 
@@ -88,7 +94,8 @@ public class PlayScreen2 implements Initializable{
         //discard hand and lose money
         playHand1.setVisible(false);
         foldHand1.setVisible(false);
-        playedHand1 = false;
+        // playedHand1 = false;
+        gameData.setPlayedHand(false);
         evalHands();
     }
 
@@ -105,7 +112,24 @@ public class PlayScreen2 implements Initializable{
         restartOption.setDisable(true); //HAHA THEY CANT RESET IF THEY LOSE THEY HAVE TO WATCH
 
         //deal dealer's hand and pause on displaying it bc it's cool (in case we want to set up animations)
-        theDealer.setDealersHand(theDealer.dealHand());
+        gameData.setGameState(13);
+        clientConnection.send(gameData);
+        PokerInfo receivedInfo = PokerInfo.getInstance();
+        while(receivedInfo.getGameState() != 14)
+        {
+            System.out.println("IN GS 14 LOOP");
+            try
+            {
+                receivedInfo = (PokerInfo)clientConnection.in.readObject();
+                Deck receivedDeck = receivedInfo.getDealer().getTheDeck();
+                gameData.getDealer().setTheDeck(receivedDeck);
+                theDealer = receivedInfo.getDealer();
+            } 
+            catch(Exception ex) { ex.toString(); }
+        }
+        System.out.println("AFTER GS 14 LOOP");
+        gameData.getDealer().setDealersHand(theDealer.getDealersHand());
+
         //deal cards to dealer and evaluate hands
         flipDealerPause.setOnFinished( e -> {
             updateCardDisplay(card7, card8, card9, theDealer.getDealersHand());
@@ -115,15 +139,63 @@ public class PlayScreen2 implements Initializable{
         evalHandsPause.setOnFinished( e -> {
             //settle winnings, update UI/chat, and go back to PlayScreen1
             chat.add("Turn " + gameData.addTurn() + ":");
-            settlePlayerWinnings(playedHand1, playerOne, "Player ");
+            // settlePlayerWinnings(playedHand1, playerOne, "Player"); TODO: MOVE TO SERVER
+            gameData.setGameState(15);
+            clientConnection.send(gameData);
+            PokerInfo receivedInfo2 = PokerInfo.getInstance();
+            while(receivedInfo2.getGameState() != 16)
+            {
+                System.out.println("IN GS 16 LOOP");
+                try
+                {
+                    receivedInfo2 = (PokerInfo)clientConnection.in.readObject();
+
+                    Player receivedPlayer = receivedInfo2.getPlayerOne();
+                    gameData.getPlayerOne().setHand(receivedPlayer.getHand());
+                    playerOne = receivedPlayer;
+
+                    playerOne.setAnteBet(receivedPlayer.getAnteBet());
+                    playerOne.setPairPlusBet(receivedPlayer.getPairPlusBet());
+                    playerOne.setTotalWinnings(receivedPlayer.getTotalWinnings());
+
+                    Deck receivedDeck = receivedInfo2.getDealer().getTheDeck();
+                    gameData.getDealer().setTheDeck(receivedDeck);
+                    theDealer = receivedInfo2.getDealer();
+
+                    Queue<String> receivedChat = receivedInfo2.getChat();
+                    gameData.setChat(receivedChat);
+
+                    gameData.setPlayedHand(receivedInfo2.getPlayedHand());
+                } 
+                catch(Exception ex) { ex.toString(); }
+            }
+            System.out.println("AFTER GS 16 LOOP");
+
             updateUI();
         });
 
         //let player actually process what's oging on before changing scenes
         transitionScene.setOnFinished( e -> {
             //for game return reasons, set playedHands to false and reset dealer's hand
-            theDealer.setDealersHand(null);
-            playedHand1 = false;
+            // theDealer.setDealersHand(null);
+
+            gameData.setGameState(17);
+            clientConnection.send(gameData);
+            PokerInfo receivedInfo2 = PokerInfo.getInstance();
+            while(receivedInfo2.getGameState() != 18)
+            {
+                System.out.println("IN GS 18 LOOP");
+                try
+                {
+                    receivedInfo2 = (PokerInfo)clientConnection.in.readObject();
+                    gameData.getDealer().setDealersHand(receivedInfo2.getDealer().getDealersHand());
+                } 
+                catch(Exception ex) { ex.toString(); }
+            }
+            System.out.println("AFTER GS 18 LOOP");
+
+            // playedHand1 = false;
+            gameData.setPlayedHand(false);
             try { loadPS1();} 
             catch(Exception ex) { ex.printStackTrace(); System.exit(1); }
         });
@@ -133,58 +205,59 @@ public class PlayScreen2 implements Initializable{
         transitionScene.play();
     }
 
-    public void settlePlayerWinnings(boolean playedHand, Player p, String playerToString) 
-    {
-        //Player played hand
-        if(playedHand)
-        {
-            //only settle ante if dealer's hand is valid
-            if(ThreeCardLogic.validDealerHand(theDealer.getDealersHand()))
-            {
-                switch(ThreeCardLogic.compareHands(theDealer.getDealersHand(), p.getHand())) 
-                {
-                    case 0: { //push
-                        chat.add(playerToString + " pushes against Dealer");
-                        break;
-                    }
-                    case 1: { //dealer wins
-                        chat.add(addDescription(1,p,playerToString));
-                        chat.add(playerToString + " loses $" + Integer.toString(p.getAnteBet()));
-                        p.setTotalWinnings(p.getTotalWinnings() - p.getAnteBet());
-                        break;
-                    }
-                    case 2: { //player wins
-                        chat.add(addDescription(0,p,playerToString));
-                        chat.add(playerToString + " wins $" + Integer.toString(p.getAnteBet()));
-                        p.setTotalWinnings(p.getTotalWinnings() + p.getAnteBet());
-                        break;
-                    }
-                }
-            }
-            else {chat.add(playerToString + " pushes. Dealer doesn't have at least Queen High");}
+    //TODO: REAL EVALUATIONS HAPPENING HERE
+    // public void settlePlayerWinnings(boolean playedHand, Player p, String playerToString) 
+    // {
+    //     //Player played hand
+    //     if(playedHand)
+    //     {
+    //         //only settle ante if dealer's hand is valid
+    //         if(ThreeCardLogic.validDealerHand(theDealer.getDealersHand()))
+    //         {
+    //             switch(ThreeCardLogic.compareHands(theDealer.getDealersHand(), p.getHand())) 
+    //             {
+    //                 case 0: { //push
+    //                     chat.add(playerToString + " pushes against Dealer");
+    //                     break;
+    //                 }
+    //                 case 1: { //dealer wins
+    //                     chat.add(addDescription(1,p,playerToString));
+    //                     chat.add(playerToString + " loses $" + Integer.toString(p.getAnteBet()));
+    //                     p.setTotalWinnings(p.getTotalWinnings() - p.getAnteBet());
+    //                     break;
+    //                 }
+    //                 case 2: { //player wins
+    //                     chat.add(addDescription(0,p,playerToString));
+    //                     chat.add(playerToString + " wins $" + Integer.toString(p.getAnteBet()));
+    //                     p.setTotalWinnings(p.getTotalWinnings() + p.getAnteBet());
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //         else {chat.add(playerToString + " pushes. Dealer doesn't have at least Queen High");}
 
-            //settle pair plus winnings regardless of dealer's hand
-            int ppWinnings = ThreeCardLogic.evalPPWinnings(p.getHand(), p.getPairPlusBet());
-            if(ppWinnings > 0) 
-            {
-                int handValue = ThreeCardLogic.evalHand(p.getHand());
-                chat.add(playerToString + " wins $" + Integer.toString(p.getPairPlusBet()) + " from Pair Plus with a " + handToString(handValue));
-                p.setTotalWinnings(p.getTotalWinnings() + ppWinnings);
-            }
-            else 
-            {
-                chat.add(playerToString + " loses $" + Integer.toString(p.getPairPlusBet()) + " from Pair Plus");
-                p.setTotalWinnings(p.getTotalWinnings() - ppWinnings);
-            }
-        }
-        else
-        {
-            //otherwise, player one folded and must lose ante + pair plus (if made)
-            chat.add(playerToString + " folds and loses $" + Integer.toString(p.getAnteBet() + p.getPairPlusBet()));
-            p.setTotalWinnings(p.getTotalWinnings() - p.getAnteBet()); 
-            p.setTotalWinnings(p.getTotalWinnings() - p.getPairPlusBet());
-        }
-    }
+    //         //settle pair plus winnings regardless of dealer's hand
+    //         int ppWinnings = ThreeCardLogic.evalPPWinnings(p.getHand(), p.getPairPlusBet());
+    //         if(ppWinnings > 0) 
+    //         {
+    //             int handValue = ThreeCardLogic.evalHand(p.getHand());
+    //             chat.add(playerToString + " wins $" + Integer.toString(p.getPairPlusBet()) + " from Pair Plus with a " + handToString(handValue));
+    //             p.setTotalWinnings(p.getTotalWinnings() + ppWinnings);
+    //         }
+    //         else 
+    //         {
+    //             chat.add(playerToString + " loses $" + Integer.toString(p.getPairPlusBet()) + " from Pair Plus");
+    //             p.setTotalWinnings(p.getTotalWinnings() - ppWinnings);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         //otherwise, player one folded and must lose ante + pair plus (if made)
+    //         chat.add(playerToString + " folds and loses $" + Integer.toString(p.getAnteBet() + p.getPairPlusBet()));
+    //         p.setTotalWinnings(p.getTotalWinnings() - p.getAnteBet()); 
+    //         p.setTotalWinnings(p.getTotalWinnings() - p.getPairPlusBet());
+    //     }
+    // }
 
     public void loadPS1() throws IOException {
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
@@ -194,7 +267,7 @@ public class PlayScreen2 implements Initializable{
         ps1Root.getStylesheets().add(gameData.getStyle(1));
 
         pause.setOnFinished(e-> {
-                ps2Root.getScene().setRoot(ps1Root);//update scene graph
+                ps2Root.getScene().setRoot(ps1Root);//te scene graph
             }
         );
 

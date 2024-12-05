@@ -18,13 +18,18 @@ import javafx.util.Duration;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import java.util.Queue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import javafx.scene.control.ListView;
 
-public class PlayScreen1 implements Initializable{
+public class ServerGUI implements Initializable{
+    //will just receive the same object anyways from StartController w/ parameters
+    Server serverConnection = Server.getInstance(null, 5555);
+
     GameData gameData = GameData.getInstance();
     Player playerOne = gameData.getPlayerOne();
     Dealer theDealer = gameData.getDealer();
@@ -44,20 +49,23 @@ public class PlayScreen1 implements Initializable{
     private Label statsLabel;
 
     @FXML
-    private ListView statsList;
+    private ListView<String> statsList;
 
     @FXML
     private Label clientLabel;
 
     @FXML
-    private ListView clientList;
+    private ListView<String> clientList;
+    static private ObservableList<String> realClientList;
 
     @Override
     //public void initialize() {
     public void initialize(URL location, ResourceBundle resources) {
         gameData.setGameState(0);
-        //numClients.setEditable(false);
 
+        realClientList = Server.realClientList;
+        realClientList.addAll("lsdkfjsdlf");
+        clientList.setItems(realClientList);
     }
 
     public void loadPS2() throws IOException {
