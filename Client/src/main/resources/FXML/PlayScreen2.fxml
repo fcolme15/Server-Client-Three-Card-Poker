@@ -40,9 +40,16 @@
                 <TextArea fx:id="chatLog" editable="false" wrapText="true" layoutX="700" layoutY="0"/>
             </Pane>
 
+            <Pane> 
+                <HBox alignment="CENTER" spacing="10" layoutX="225" layoutY="100">
+                    <Button fx:id="playAgainButton" text="Play Again?" styleClass="result-button" onAction="#playAnother"/>
+                    <Button fx:id="exitButton" text="Exit Game" styleClass="result-button" onAction="#terminateGame"/>
+                </HBox>
+            </Pane>
+
             <Pane>
                 <!-- Player 1 -->
-                <VBox alignment="CENTER" spacing="10" layoutX="300" layoutY="300">
+                <VBox alignment="CENTER" spacing="0" layoutX="300" layoutY="-30">
                     <HBox alignment="CENTER" spacing="5">
                         <Button fx:id="playHand1" text="Play" onAction="#playAction1"/>
                         <Button fx:id="foldHand1" text="Fold" onAction="#foldAction1"/>

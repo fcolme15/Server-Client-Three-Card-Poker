@@ -123,3 +123,10 @@
     -fx-pref-height: 200px;
     -fx-wrap-text: true;
 }
+
+.result-button
+{
+    -fx-padding: 10px;
+    -fx-pref-width: 300;
+    -fx-pref-height: 150px;
+}

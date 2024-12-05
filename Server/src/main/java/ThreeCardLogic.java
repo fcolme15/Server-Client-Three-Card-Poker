@@ -143,14 +143,14 @@ public class ThreeCardLogic {
                     }
                     case 1: { //dealer wins
                         chat.add(addDescription(1,p,playerToString, theDealer));
-                        chat.add(playerToString + " loses $" + Integer.toString(p.getAnteBet()));
-                        p.setTotalWinnings(p.getTotalWinnings() - p.getAnteBet());
+                        chat.add(playerToString + " loses $" + Integer.toString(p.getAnteBet() + p.getAnteBet()));
+                        p.setTotalWinnings(p.getTotalWinnings() - (p.getAnteBet() + p.getAnteBet()));
                         break;
                     }
                     case 2: { //player wins
                         chat.add(addDescription(0,p,playerToString, theDealer));
-                        chat.add(playerToString + " wins $" + Integer.toString(p.getAnteBet()));
-                        p.setTotalWinnings(p.getTotalWinnings() + p.getAnteBet());
+                        chat.add(playerToString + " wins $" + Integer.toString(p.getAnteBet() + p.getAnteBet()));
+                        p.setTotalWinnings(p.getTotalWinnings() + (p.getAnteBet() + p.getAnteBet()));
                         break;
                     }
                 }
@@ -159,16 +159,16 @@ public class ThreeCardLogic {
 
             //settle pair plus winnings regardless of dealer's hand
             int ppWinnings = ThreeCardLogic.evalPPWinnings(p.getHand(), p.getPairPlusBet());
-            if(ppWinnings > 0) 
+            if(ppWinnings != 0) 
             {
                 int handValue = ThreeCardLogic.evalHand(p.getHand());
-                chat.add(playerToString + " wins $" + Integer.toString(p.getPairPlusBet()) + " from Pair Plus with a " + handToString(handValue));
+                chat.add(playerToString + " wins $" + Integer.toString(ppWinnings) + " from Pair Plus with a " + handToString(handValue));
                 p.setTotalWinnings(p.getTotalWinnings() + ppWinnings);
             }
             else 
             {
                 chat.add(playerToString + " loses $" + Integer.toString(p.getPairPlusBet()) + " from Pair Plus");
-                p.setTotalWinnings(p.getTotalWinnings() - ppWinnings);
+                p.setTotalWinnings(p.getTotalWinnings() - p.getPairPlusBet());
             }
         }
         else
