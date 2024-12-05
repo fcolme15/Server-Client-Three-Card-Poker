@@ -26,11 +26,9 @@
 /* Dealer area + Player winnings styling */
 #dealerLabel, #player1TW
 {
-    -fx-font-size: 24px; /* Font size for dealer label */
+    -fx-font-size: 30px; /* Font size for dealer label */
     -fx-font-weight: bold; /* Bold text */
-
     -fx-text-fill: #083207;
-
     -fx-alignment: center; /* Center the label */
 }
 

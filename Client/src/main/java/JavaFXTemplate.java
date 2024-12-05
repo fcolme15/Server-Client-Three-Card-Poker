@@ -8,7 +8,7 @@ public class JavaFXTemplate extends Application {
 	/*********************************************************************************/
 	/********************** 	APPLICATION INITALIZATION 		**********************/
 	/*********************************************************************************/
-	GameData gameData;
+	PokerInfo gameData;
 	Player playerOne;
 	Player playerTwo;
 	Dealer theDealer;

@@ -1,0 +1,70 @@
+/*****************************************/
+/*              GENERAL CSS              */
+/*****************************************/
+#ps1Root, #ps2Root
+{
+    -fx-padding: 0; /* Adjust this to control spacing */
+    -fx-spacing: 20;
+    -fx-background-color: #2a6891;
+}
+
+/* MenuBar styling */
+.menu-bar
+{
+    -fx-background-color: #969696;
+    -fx-text-base-color: rgb(0, 0, 0); /* Black text */
+}
+.menu:hover
+{
+    -fx-background-color: #828282;
+}
+.menu-item:hover
+{
+    -fx-background-color: #828282;
+}
+
+#titleLabel {
+    -fx-font-size: 48px; /* Increase font size for better visibility */
+    -fx-text-fill: #1e1d1d; /* Dark text color */
+    -fx-font-weight: bold; /* Make the label bold */
+    -fx-alignment: center; /* Center the label */
+}
+
+/* Dealer area + Player winnings styling */
+#clientLabel, #statsLabel
+{
+    -fx-font-size: 30px; /* Font size for dealer label */
+    -fx-font-weight: bold; /* Bold text */
+    -fx-text-fill: #1e1d1d; /* Dark text color */
+    -fx-alignment: center; /* Center the label */
+}
+
+#numClients
+{
+    -fx-focus-color: transparent;
+    -fx-text-box-border: transparent;
+    -fx-control-inner-background:transparent; /* Inner area background */
+    -fx-background-insets: 0;                /* Removes insets/margins around the background */
+    -fx-text-fill: black;                    /* Sets text color */
+    -fx-font-size: 14px;                     /* Optional: Sets font size */
+    -fx-pref-width: 300px;
+}
+
+/* Button styling */
+.button
+{
+    -fx-background-color: #17333e; /* Blue background */
+    -fx-text-fill: white; /* White text */
+    -fx-font-size: 16px; /* Font size */
+    -fx-padding: 10; /* Padding around the button */
+    -fx-background-radius: 5; /* Rounded corners */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0.0, 0, 1); /* Drop shadow effect */
+    -fx-pref-width: 150px;
+    -fx-max-width: 150px;
+}
+
+/* Hover effect for buttons */
+.button:hover
+{
+    -fx-background-color: #1f4453; /* Blue background */
+}

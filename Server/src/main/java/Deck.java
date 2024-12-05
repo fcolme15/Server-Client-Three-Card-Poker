@@ -1,9 +1,8 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.io.Serializable;
 
-
-
-public class Deck extends ArrayList<Card> {
+public class Deck extends ArrayList<Card> implements Serializable {
 
     private char[] suits = {'C', 'D', 'H', 'S'};
 

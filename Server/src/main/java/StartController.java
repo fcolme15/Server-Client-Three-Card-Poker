@@ -10,16 +10,17 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-import java.util.function.UnaryOperator;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.control.TextFormatter.Change;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
 
 
 public class StartController implements Initializable{
+    Server serverConnection;
+    static private ObservableList<String> realClientList;
 
     @FXML
     private BorderPane ssRoot; //start screen
@@ -48,36 +49,18 @@ public class StartController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ssRoot.getStylesheets().add(GameData.getInstance().getStyle(0));
-
-//        portNum.focusedProperty().addListener((o, oldValue, newValue) -> {
-//            if (newValue) {
-//                Platform.runLater(() -> {
-//                    int carretPosition = portNum.getCaretPosition();
-//                    if (portNum.getAnchor() != carretPosition) {
-//                        portNum.selectRange(carretPosition, carretPosition);
-//                    }
-//                });
-//            }
-//        });
-
-        //Filter for text field portNum to only accept numbers
-//        UnaryOperator<Change> NumberFilter = change -> {
-//            String newtxt = change.getControlNewText();
-//            String textused = change.getText();
-//
-//            if (newtxt.matches("\\d*")) {
-//                return change;
-//            } else {
-//                return null;
-//            }
-//        };
-//
-//        //Formatter for text field portNum to only accept numbers
-//        TextFormatter<String> NumberFormatter = new TextFormatter<>(NumberFilter);
-//        portNum.setTextFormatter(NumberFormatter);
     }
 
     public void toServer(ActionEvent e) throws IOException {
+        int portNumber = Integer.parseInt(portNum.getText());
+        serverConnection = Server.getInstance(gameData -> {
+            Platform.runLater(()->{});}, 
+        portNumber);
+
+        realClientList = Server.realClientList;
+        realClientList.addAll("from start controollere");
+        // clientList.setItems(realClientList);
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ServerScreen.fxml"));
         Parent ps1Root = loader.load(); //load view into parent
 

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Player {
+public class Player implements Serializable {
     private ArrayList<Card> hand;
     private int anteBet;
     private int playBet;
