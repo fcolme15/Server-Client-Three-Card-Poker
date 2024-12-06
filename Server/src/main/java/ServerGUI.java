@@ -57,14 +57,19 @@ public class ServerGUI implements Initializable{
     @FXML
     private ListView<String> clientList;
     static private ObservableList<String> realClientList;
+    static private ObservableList<String> realStatsList;
 
     @Override
     //public void initialize() {
     public void initialize(URL location, ResourceBundle resources) {
         gameData.setGameState(0);
 
+        realStatsList = Server.realStatsList;
+        //realStatsList.addAll("I am in stats");
+        statsList.setItems(realStatsList);
+
         realClientList = Server.realClientList;
-        realClientList.addAll("lsdkfjsdlf");
+        //realClientList.addAll("im in client");
         clientList.setItems(realClientList);
     }
 

@@ -105,6 +105,9 @@ public class PlayScreen2 implements Initializable{
         foldHand1.setVisible(false);
         // playedHand1 = false;
         gameData.setPlayedHand(false);
+        Player player = gameData.getPlayerOne();
+        player.setWonLastHand(3);
+        player.setTotalWinnings(player.getTotalWinnings() - (player.getPushedAnte() + player.getAnteBet()));
         evalHands();
     }
 
@@ -356,42 +359,7 @@ public class PlayScreen2 implements Initializable{
         }
     }
 
-    public String addDescription(int winner, Player p, String playerToString){
-        String winnerString, winnerDescription, loserDescription;
-        int dealerValue = ThreeCardLogic.evalHand(theDealer.getDealersHand());
-        int playerValue = ThreeCardLogic.evalHand(p.getHand());
-        if (winner == 1){
-            winnerString = "Dealer";
-            winnerDescription = handToString(dealerValue);
-            loserDescription = handToString(playerValue);
-        }
-        else {
-            winnerString = playerToString;
-            winnerDescription = handToString(playerValue);
-            loserDescription = handToString(dealerValue);
-        }
-        if (playerValue == dealerValue){
-            return winnerString + " won the game with a High Card";
-        }
-        return winnerString + " won the game, " + winnerDescription + " beats " + loserDescription;
-    }
 
-    public String handToString(int hand){
-        switch(hand){
-            case 1:
-                return "Straight Flush";
-            case 2:
-                return "Three of a Kind";
-            case 3:
-                return "Straight";
-            case 4:
-                return "Flush";
-            case 5:
-                return "Pair";
-            default:
-                return "High Card";
-        }
-    }
 
     }
 

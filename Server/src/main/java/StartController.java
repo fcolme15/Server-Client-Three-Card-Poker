@@ -58,7 +58,7 @@ public class StartController implements Initializable{
         portNumber);
 
         realClientList = Server.realClientList;
-        realClientList.addAll("from start controollere");
+        //realClientList.addAll("from start controollere");
         // clientList.setItems(realClientList);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ServerScreen.fxml"));

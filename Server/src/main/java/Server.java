@@ -19,7 +19,10 @@ public class Server {
     private ArrayList<ClientThread> clients = new ArrayList<ClientThread>();
     private TheServer server;
     public ListView<String> clientList = new ListView<>();
+    public ListView<String> statList = new ListView<>();
     static public ObservableList<String> realClientList = FXCollections.observableArrayList();
+    static public ObservableList<String> realStatsList = FXCollections.observableArrayList();
+
     private int port;
     private PokerInfo gamedata;
 
@@ -48,7 +51,7 @@ public class Server {
         {
             try(ServerSocket mysocket = new ServerSocket(port))
             {
-                Platform.runLater(() -> { realClientList.addAll("Server is waiting for a client!\n"); });
+                Platform.runLater(() -> { realClientList.addAll("Waiting for a client!\n"); });
                 System.out.println("CONNECTED TO SERVER");
                 //event loop
                 while(true)
@@ -57,7 +60,7 @@ public class Server {
                     ClientThread c = new ClientThread(mysocket.accept(), count);
 
                     //Blocking call waiting for client to connect to server and then add client
-                    Platform.runLater(() -> {realClientList.addAll("A client has connected to server: client #" + count + "\n");});
+                    Platform.runLater(() -> {realClientList.addAll("Client #" + count + "has connected to the server");});
                     synchronized(clients) { clients.add(c); }
                     c.start();
 
@@ -122,8 +125,7 @@ public class Server {
                             out.writeObject(data);
                             out.flush();
 
-                            realClientList.addAll("A new game is being played");
-                            clientList.setItems(realClientList);
+                            Platform.runLater(() -> {realStatsList.addAll("Client " + count + " is playing another hand");});
 
                             break;
                         }
@@ -133,6 +135,9 @@ public class Server {
                             System.out.println("IN CASE 13");
                             clientDealer.setDealersHand(clientDealer.dealHand());
                             data.setGameState(14);
+                            Player player = data.getPlayerOne();
+                            Platform.runLater(() -> {realStatsList.addAll("Client " + count + " bet $" + player.getAnteBet() + " as ante bet");});
+                            Platform.runLater(() -> {realStatsList.addAll("Client " + count + " bet $" + player.getPairPlusBet() + " as PairPlus bet");});
 
                             out.writeObject(data);
                             out.flush();
@@ -146,8 +151,50 @@ public class Server {
                                                         "Player", data.getDealer(), data.getChat());
                             data.setGameState(16);
 
+                            Player player = data.getPlayerOne();
+                            int winningsBefore = player.getLastestHandWinnings();
+                            int whoWon = player.getWonLastHand();
+                            int winnings;
+                            if (data.getPlayedHand()){
+                                winnings = 2 * winningsBefore;
+                            }
+                            else{
+                                winnings = winningsBefore;
+                            }
+
+                            if (whoWon == 0){
+                                Platform.runLater(() -> {realStatsList.addAll("Dealer didn't have Queen or higher so client " + count + " pushed: $" + winnings);});
+                            }
+                            else if (whoWon == 1){
+                                Platform.runLater(() -> {realStatsList.addAll("Client " + count + " lost: $" + winnings + " from ante wager");});
+                            }
+                            else if (whoWon == 2){
+                                Platform.runLater(() -> {realStatsList.addAll("Client " + count + " won: $" + winnings + " from ante wager");});
+                            }
+                            else if (whoWon == 3){
+                                Platform.runLater(() -> {realStatsList.addAll("Client " + count + " folded and lost: $" + winnings + "from ante wager");});
+                            }
+                            else{
+                                System.out.println("Error, Bad");
+                                System.exit(0);
+                            }
+
+                            int ppBet = player.getPairPlusBet();
+                            if (!(ppBet == 0)){
+                                int ppWinnings = player.getPairPlusWon();
+                                if (ppWinnings > 0){
+                                    Platform.runLater(() -> {realStatsList.addAll("Client " + count + " won: $" + ppWinnings + " from pair plus wager");});
+                                }
+                                else{
+                                    Platform.runLater(() -> {realStatsList.addAll("Client " + count + " lost: $" + ppBet + " from pair plus wager");});
+                                }
+                            }
+
+                            Platform.runLater(() -> {realStatsList.addAll("Client " + count + " currently has $" + player.getTotalWinnings() + " earnings");});
+
                             out.writeObject(data);
                             out.flush();
+
                             break;
                         }
                         //    17 -> Server nulls dealer's hand
@@ -164,10 +211,6 @@ public class Server {
                         default:
                             System.out.println("OKAY James BROKE IT");
                     }
-
-                    /*GAME LOGIC*/
-                    Platform.runLater(() -> { realClientList.addAll(
-                        "Player " + count + "'s ante bet: " + anteBetString); });
                 }
                 catch(Exception e)
                 {
