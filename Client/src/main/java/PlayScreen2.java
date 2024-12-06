@@ -105,9 +105,9 @@ public class PlayScreen2 implements Initializable{
         foldHand1.setVisible(false);
         // playedHand1 = false;
         gameData.setPlayedHand(false);
-        Player player = gameData.getPlayerOne();
-        player.setWonLastHand(3);
-        player.setTotalWinnings(player.getTotalWinnings() - (player.getPushedAnte() + player.getAnteBet()));
+        //Player player = gameData.getPlayerOne();
+        //player.setWonLastHand(3);
+        //player.setTotalWinnings(player.getTotalWinnings() - (player.getPushedAnte() + player.getAnteBet()));
         evalHands();
     }
 

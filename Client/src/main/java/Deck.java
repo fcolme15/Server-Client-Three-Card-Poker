@@ -22,7 +22,6 @@ public class Deck extends ArrayList<Card> implements Serializable {
         this.clear(); //clear the current deck
         for(int i = 2; i < 15; i++){
             for(int j = 0; j < 4; j++){
-                // this.deck.add((new Card(suits[j],i)));
                 this.add(new Card(suits[j], i));
             }
         }

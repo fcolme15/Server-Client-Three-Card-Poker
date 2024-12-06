@@ -238,6 +238,7 @@ public class PlayScreen1 implements Initializable{
         deckCard.setGraphic(c1Img);
         
         //update total winnings display
+        System.out.println(playerOne.getTotalWinnings());
         if(playerOne.getTotalWinnings() >= 0) player1TW.setText("Total Winnings: $" + Integer.toString(playerOne.getTotalWinnings()));
         else player1TW.setText("Total Winnings: -$" + Integer.toString(playerOne.getTotalWinnings()*-1));
 
