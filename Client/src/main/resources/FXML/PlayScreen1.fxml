@@ -17,7 +17,7 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="PlayScreen1" fx:id="ps1Root">
     <top>
-        <MenuBar >
+        <MenuBar>
             <Menu  text="Options">
                 <MenuItem text="Fresh Start" onAction="#freshStart" fx:id="restartOption"/>
                 <MenuItem text="New Look" onAction="#newLook"/>
@@ -41,7 +41,7 @@
                 </VBox>
                 <TextArea fx:id="chatLog" editable="false" wrapText="true" layoutX="700" layoutY="0"/>
             </Pane>
-
+            
             <Pane>
                 <!-- Player 1 -->
                 <VBox alignment="CENTER" spacing="10" layoutX="322.5" layoutY="330">
@@ -65,8 +65,4 @@
             </Pane>
         </VBox>
     </center>
-
-<!--    <bottom>-->
-
-<!--    </bottom>-->
 </BorderPane>

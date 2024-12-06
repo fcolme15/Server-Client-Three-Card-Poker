@@ -22,29 +22,26 @@
     </top>
 
     <center>
-        <!-- Outer Pane for absolute positioning -->
-<!--        <Pane prefWidth="600" prefHeight="400">-->
         <Pane>
             <!-- TitleLabel (centered at the top) -->
-            <Label text="Server" fx:id="titleLabel" layoutX="450" layoutY="10"/>
+            <Label text="Server" fx:id="titleLabel" layoutX="400" layoutY="10"/>
 
             <!-- NumClients Button (top-right corner) -->
             <Button fx:id="numClients" text="Num Clients" layoutX="800" layoutY="10"/>
 
             <!-- Stats and Client sections positioned below -->
-<!--            <Pane layoutX="150" layoutY="100" prefWidth="300" prefHeight="200">-->
-            <Pane layoutX="150" layoutY="100" >
+            <Pane layoutX="0" layoutY="100" >
                 <HBox spacing="100" layoutX="50" layoutY="50">
                     <!-- Stats section -->
                     <VBox alignment="CENTER" spacing="10">
                         <Label text="Game Stats" fx:id="statsLabel"/>
-                        <ListView fx:id="statsList"/>
+                        <ListView fx:id="statsList" prefWidth="400"/>
                     </VBox>
 
                     <!-- Client section -->
                     <VBox alignment="CENTER" spacing="10">
                         <Label text="Client Log" fx:id="clientLabel"/>
-                        <ListView fx:id="clientList"/>
+                        <ListView fx:id="clientList" prefWidth="400"/>
                     </VBox>
                 </HBox>
             </Pane>

@@ -18,6 +18,7 @@ import javafx.util.Duration;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import java.util.Queue;
+import javafx.application.Platform;
 
 //Start Images includes
 import javafx.scene.image.Image;
@@ -110,7 +111,7 @@ public class PlayScreen1 implements Initializable{
         if(!player1PP.isDisable()) 
         { 
             playerOne.setPairPlusBet(0); 
-            displayPP1.setText(Integer.toString(playerOne.getPairPlusBet()));
+            displayPP1.setText("$"+Integer.toString(playerOne.getPairPlusBet()));
             player1PP.setDisable(true); 
         }
         else 
@@ -118,7 +119,7 @@ public class PlayScreen1 implements Initializable{
             player1PP.setDisable(false); 
             ppSliders(player1PP, displayPP1, playerOne);
             playerOne.setPairPlusBet(5);
-            displayPP1.setText(Integer.toString(playerOne.getPairPlusBet()));
+            displayPP1.setText("$"+Integer.toString(playerOne.getPairPlusBet()));
         }
     }
 
@@ -147,7 +148,23 @@ public class PlayScreen1 implements Initializable{
                 gameData.getDealer().setTheDeck(receivedDeck);
                 playerOne = receivedInfo.getPlayerOne();
             } 
-            catch(Exception ex) { ex.toString(); }
+            catch(Exception ex) 
+            { 
+                /*server crashed here*/ 
+                ex.toString();
+                Platform.runLater(() -> {
+                    chat.add("Server Crashed!!! Ending exiting game...");
+                    updateUI();
+                });
+
+                PauseTransition pause = new PauseTransition(Duration.seconds(2));
+                pause.setOnFinished(p -> {
+                    System.exit(0);
+                });
+                
+                pause.play();
+                break;
+            }
         }
         System.out.println("AFTER GS 12 LOOP");
         gameData.getPlayerOne().setHand(playerOne.getHand());

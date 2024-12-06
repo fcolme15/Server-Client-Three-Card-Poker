@@ -41,7 +41,7 @@
             </Pane>
 
             <Pane> 
-                <HBox alignment="CENTER" spacing="10" layoutX="225" layoutY="100">
+                <HBox alignment="CENTER" spacing="10" layoutX="200" layoutY="100">
                     <Button fx:id="playAgainButton" text="Play Again?" styleClass="result-button" onAction="#playAnother"/>
                     <Button fx:id="exitButton" text="Exit Game" styleClass="result-button" onAction="#terminateGame"/>
                 </HBox>

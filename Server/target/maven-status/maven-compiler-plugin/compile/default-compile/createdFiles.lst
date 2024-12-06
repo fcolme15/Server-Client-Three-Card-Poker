@@ -11,3 +11,4 @@ Card.class
 ServerGUI.class
 Dealer.class
 Server$TheServer.class
+ServerGUI$1.class

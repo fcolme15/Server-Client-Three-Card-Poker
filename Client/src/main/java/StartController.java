@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import java.net.Socket;
 
 public class StartController implements Initializable{
 
@@ -38,33 +39,67 @@ public class StartController implements Initializable{
     @FXML
     private Button exitButton;
 
+    @FXML
+    private Label invalidText;
+
     @Override
     //public void initialize() {
     public void initialize(URL location, ResourceBundle resources) {
         ssRoot.getStylesheets().add(PokerInfo.getInstance().getStyle(0));
     }
 
+    //thank you compiler design
+    private boolean onlyDigits(String s)
+    {
+        return s.matches("[0-9]+");
+    }
+
     public void startGame(ActionEvent e) throws IOException {
+        //make sure port number is valid
+        if(!onlyDigits(portField.getText())) 
+        { 
+            invalidText.setText("Invalid Port Number..."); 
+            invalidText.setVisible(true); 
+            return; 
+        }
+        
         //disable text fields and button so we can process the IP address and port num
         portField.setDisable(true);
         ipField.setDisable(true);
         connectButton.setDisable(true);
         connectButton.setText("Connecting...");
 
-        int portNumber = Integer.parseInt(portField.getText());
-        String ipAddress = ipField.getText();
-
-        clientConnection = Client.getInstance(
-            gameData -> {Platform.runLater(()->{});}, portNumber, ipAddress);
-            clientConnection.start();
-
-        /* load into game */
-        //get instance of the loader class
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/PlayScreen1.fxml"));
-        Parent ps1Root = loader.load(); //load view into parent
-
-        ps1Root.getStylesheets().add(PokerInfo.getInstance().getStyle(1));
-        ssRoot.getScene().setRoot(ps1Root);//update scene graph
+        try
+        {
+            int portNumber = Integer.parseInt(portField.getText());
+            String ipAddress = ipField.getText();
+    
+            try(Socket socket = new Socket(ipAddress, portNumber))
+            {
+                clientConnection = Client.getInstance(
+                    gameData -> {Platform.runLater(()->{});}, portNumber, ipAddress);
+                    clientConnection.start();
+                    
+                /* load into game */
+                //get instance of the loader class
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/PlayScreen1.fxml"));
+                Parent ps1Root = loader.load(); //load view into parent --> CRASHES HERE
+                    
+                ps1Root.getStylesheets().add(PokerInfo.getInstance().getStyle(1));
+                ssRoot.getScene().setRoot(ps1Root);//update scene graph
+            }
+            catch(Exception ex) 
+            {  
+                invalidText.setText("Failed to Connect, try again");
+                invalidText.setVisible(true);
+                portField.setDisable(false);
+                ipField.setDisable(false);
+                connectButton.setDisable(false);
+                connectButton.setText("Connect to Server");
+                ex.toString();
+            }
+        }
+        catch(Exception ex) { ex.toString(); }
     }
 
     public void returnToGame(ActionEvent e) throws IOException {

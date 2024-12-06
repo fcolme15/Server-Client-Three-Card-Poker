@@ -3,6 +3,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -71,20 +72,16 @@ public class ServerGUI implements Initializable{
         realClientList = Server.realClientList;
         //realClientList.addAll("im in client");
         clientList.setItems(realClientList);
-    }
 
-    public void loadPS2() throws IOException {
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/PlayScreen2.fxml"));
-        Parent ps2Root = loader.load(); //load view into parent
-
-        pause.setOnFinished(e-> {
-                ps2Root.getStylesheets().add(gameData.getStyle(1));
-                ps1Root.getScene().setRoot(ps2Root);//update scene graph
+        //use the IntegerProperty in Server.java to get real-time updates on # of clients connected
+        serverConnection.connectedCountProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> obs, Number oldVal, Number newVal)
+            {
+                Platform.runLater(() -> numClients.setText(newVal.intValue() + " Clients Connected!"));
             }
-        );
-
-        pause.play();
+        });
+        numClients.setText(Server.getInstance(null, 0).getClientCount() + " Clients Connected!");
     }
 
     /******************************************************/

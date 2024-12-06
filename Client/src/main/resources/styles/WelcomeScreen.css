@@ -27,3 +27,13 @@
     -fx-background-color: #006200; /* Darker green on hover */
 }
 
+#invalidText
+{
+    -fx-text-fill: #d32f2f; /* Bright red to indicate an error */
+    -fx-font-weight: bold; /* Emphasize the message */
+    -fx-font-size: 12pt; /* Adjust font size for better visibility */
+    -fx-background-color: transparent; /* Keep the background transparent */
+    -fx-padding: 5px; /* Add spacing around the text */
+    -fx-background-radius: 3px;
+}
+

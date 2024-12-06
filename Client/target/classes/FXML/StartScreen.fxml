@@ -25,6 +25,7 @@
             <TextField fx:id="portField" promptText="Enter Port Number" maxWidth="150" prefHeight="50"/>
             <TextField fx:id="ipField" promptText="Enter IP Address" maxWidth="150" prefHeight="50"/>
             <Button fx:id="connectButton" text="Connect to Server" onAction="#startGame" />
+            <Label fx:id="invalidText" text="Invalid Port Number or IP Address" visible="false" />
         </VBox>
     </center>
 </BorderPane>
