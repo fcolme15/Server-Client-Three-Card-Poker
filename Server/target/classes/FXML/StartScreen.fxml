@@ -28,6 +28,7 @@
             <TextField fx:id="portNum" promptText="Port Number" id="portNum"/>
             <Button fx:id="button1" text="Start Server" onAction="#toServer"/>
             <Button fx:id="button2" text="Exit Server" onAction="#exitServer"/>
+            <Label fx:id="invalidText" text="Invalid Port Number..." visible="false" />
         </VBox>
     </center>
 </BorderPane>

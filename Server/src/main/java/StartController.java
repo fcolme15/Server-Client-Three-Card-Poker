@@ -13,10 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ListView;
-
 
 public class StartController implements Initializable{
     Server serverConnection;
@@ -46,12 +43,25 @@ public class StartController implements Initializable{
     @FXML
     private Button exitButton;
 
+    @FXML
+    private Label invalidText;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ssRoot.getStylesheets().add(GameData.getInstance().getStyle(0));
     }
 
+    //thank you compiler design
+    private boolean onlyDigits(String s)
+    {
+        return s.matches("[0-9]+");
+    }
+
     public void toServer(ActionEvent e) throws IOException {
+        //make sure port number only consists of digits in here
+        if(!onlyDigits(portNum.getText())) { invalidText.setVisible(true); return; }
+
+        //if port number only consists of digits then we can start the server!
         int portNumber = Integer.parseInt(portNum.getText());
         serverConnection = Server.getInstance(gameData -> {
             Platform.runLater(()->{});}, 
@@ -61,6 +71,14 @@ public class StartController implements Initializable{
         //realClientList.addAll("from start controollere");
         // clientList.setItems(realClientList);
 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ServerScreen.fxml"));
+        Parent ps1Root = loader.load(); //load view into parent
+
+        ps1Root.getStylesheets().add(GameData.getInstance().getStyle(1));
+        ssRoot.getScene().setRoot(ps1Root);//update scene graph
+    }
+
+    public void returnToServer(ActionEvent e) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ServerScreen.fxml"));
         Parent ps1Root = loader.load(); //load view into parent
 

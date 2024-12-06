@@ -137,7 +137,7 @@ public class PlayScreen2 implements Initializable{
                 gameData.getDealer().setTheDeck(receivedDeck);
                 theDealer = receivedInfo.getDealer();
             } 
-            catch(Exception ex) { ex.toString(); }
+            catch(Exception ex) { ex.printStackTrace(); System.exit(0); /*server crashed here*/  }
         }
         System.out.println("AFTER GS 14 LOOP");
         gameData.getDealer().setDealersHand(theDealer.getDealersHand());
@@ -179,7 +179,7 @@ public class PlayScreen2 implements Initializable{
 
                     gameData.setPlayedHand(receivedInfo2.getPlayedHand());
                 } 
-                catch(Exception ex) { ex.toString(); }
+                catch(Exception ex) { ex.printStackTrace(); System.exit(0); /*server crashed here*/ }
             }
             System.out.println("AFTER GS 16 LOOP");
 
@@ -202,7 +202,7 @@ public class PlayScreen2 implements Initializable{
                     receivedInfo2 = (PokerInfo)clientConnection.in.readObject();
                     gameData.getDealer().setDealersHand(receivedInfo2.getDealer().getDealersHand());
                 } 
-                catch(Exception ex) { ex.toString(); }
+                catch(Exception ex) { ex.printStackTrace(); System.exit(0); /*server crashed here*/ }
             }
             System.out.println("AFTER GS 18 LOOP");
 
@@ -211,9 +211,6 @@ public class PlayScreen2 implements Initializable{
             playAgainButton.setVisible(true);
             exitButton.setVisible(true);
 
-            // MOVE LOGIC TO NEW BUTTONS playAgainButton or exitButton
-            // try { loadPS1(); } 
-            // catch(Exception ex) { ex.printStackTrace(); System.exit(1); }
         });
 
         flipDealerPause.play();

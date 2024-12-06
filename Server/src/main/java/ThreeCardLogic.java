@@ -136,7 +136,7 @@ public class ThreeCardLogic {
             if(ThreeCardLogic.validDealerHand(theDealer.getDealersHand()))
             {
                 int bet = 0;
-                bet = (2 * p.getAnteBet()) + p.getPushedAnte();
+                bet = p.getAnteBet() + p.getPushedAnte();
                 p.setPushedAnte(0);
                 switch(ThreeCardLogic.compareHands(theDealer.getDealersHand(), p.getHand())) 
                 {
