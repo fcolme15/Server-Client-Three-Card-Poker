@@ -25,6 +25,8 @@ public class Server {
     public ListView<String> statList = new ListView<>();
     static public ObservableList<String> realClientList = FXCollections.observableArrayList();
     static public ObservableList<String> realStatsList = FXCollections.observableArrayList();
+    private int[] totalWinningsSave = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    private int[] pushedAnteSave = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
     private int port;
 
@@ -119,10 +121,13 @@ public class Server {
                             clientPlayer.setHand(clientDealer.dealHand());
                             data.setGameState(12);
 
+                            Platform.runLater(() -> {realStatsList.addAll("Client " + count + " is playing another hand");});
+                            //Player player = data.getPlayerOne();
+                            clientPlayer.setTotalWinnings(totalWinningsSave[count]);
+                            clientPlayer.setPushedAnte(pushedAnteSave[count]);
+
                             out.writeObject(data);
                             out.flush();
-
-                            Platform.runLater(() -> {realStatsList.addAll("Client " + count + " is playing another hand");});
 
                             break;
                         }
@@ -132,9 +137,8 @@ public class Server {
                             System.out.println("IN CASE 13");
                             clientDealer.setDealersHand(clientDealer.dealHand());
                             data.setGameState(14);
-                            Player player = data.getPlayerOne();
-                            Platform.runLater(() -> {realStatsList.addAll("Client " + count + " bet $" + player.getAnteBet() + " as ante bet");});
-                            Platform.runLater(() -> {realStatsList.addAll("Client " + count + " bet $" + player.getPairPlusBet() + " as PairPlus bet");});
+                            Platform.runLater(() -> {realStatsList.addAll("Client " + count + " bet $" + clientPlayer.getAnteBet() + " as ante bet");});
+                            Platform.runLater(() -> {realStatsList.addAll("Client " + count + " bet $" + clientPlayer.getPairPlusBet() + " as PairPlus bet");});
 
                             out.writeObject(data);
                             out.flush();
@@ -148,46 +152,52 @@ public class Server {
                                                         "Player", data.getDealer(), data.getChat());
                             data.setGameState(16);
 
-                            Player player = data.getPlayerOne();
-                            int winningsBefore = player.getLastestHandWinnings();
-                            int whoWon = player.getWonLastHand();
-                            int winnings;
-                            if (data.getPlayedHand()){
-                                winnings = 2 * winningsBefore;
-                            }
-                            else{
-                                winnings = winningsBefore;
-                            }
+                            int winnings = clientPlayer.getLastestHandWinnings() + clientPlayer.getPushedAnte();
+                            int whoWon = clientPlayer.getWonLastHand();
+//                            int winnings;
+//                            if (data.getPlayedHand()){
+//                                winnings = 2 * winningsBefore;
+//                            }
+//                            else{
+//                                winnings = winningsBefore;
+//                            }
 
                             if (whoWon == 0){
                                 Platform.runLater(() -> {realStatsList.addAll("Dealer didn't have Queen or higher so client " + count + " pushed: $" + winnings);});
                             }
                             else if (whoWon == 1){
-                                Platform.runLater(() -> {realStatsList.addAll("Client " + count + " lost: $" + winnings + " from ante wager");});
+                                Platform.runLater(() -> {realStatsList.addAll("Client " + count + " lost: $" + Math.abs(winnings) + " from ante wager");});
                             }
                             else if (whoWon == 2){
                                 Platform.runLater(() -> {realStatsList.addAll("Client " + count + " won: $" + winnings + " from ante wager");});
                             }
                             else if (whoWon == 3){
-                                Platform.runLater(() -> {realStatsList.addAll("Client " + count + " folded and lost: $" + winnings + " from ante wager");});
+                                int lost = clientPlayer.getAnteBet() + clientPlayer.getPairPlusBet();
+                                Platform.runLater(() -> {realStatsList.addAll("Client " + count + " folded and lost: $" + lost + " from ante wager");});
+                            }
+                            else if (whoWon == 4){
+                                Platform.runLater(() -> {realStatsList.addAll("Game was a draw, client " + count + " pushed: $" + winnings);});
                             }
                             else{
                                 System.out.println("Error, Bad");
                                 System.exit(0);
                             }
 
-                            int ppBet = player.getPairPlusBet();
+                            int ppBet = clientPlayer.getPairPlusBet();
                             if (!(ppBet == 0)){
-                                int ppWinnings = player.getPairPlusWon();
+                                int ppWinnings = clientPlayer.getPairPlusWon();
                                 if (ppWinnings > 0){
                                     Platform.runLater(() -> {realStatsList.addAll("Client " + count + " won: $" + ppWinnings + " from pair plus wager");});
                                 }
                                 else{
-                                    Platform.runLater(() -> {realStatsList.addAll("Client " + count + " lost: $" + ppBet + " from pair plus wager");});
+                                    Platform.runLater(() -> {realStatsList.addAll("Client " + count + " lost: $" + Math.abs(ppBet) + " from pair plus wager");});
                                 }
                             }
 
-                            Platform.runLater(() -> {realStatsList.addAll("Client " + count + " currently has $" + player.getTotalWinnings() + " earnings");});
+                            Platform.runLater(() -> {realStatsList.addAll("Client " + count + " currently has $" + clientPlayer.getTotalWinnings() + " earnings");});
+
+                            totalWinningsSave[count] = clientPlayer.getTotalWinnings();
+                            pushedAnteSave[count] = clientPlayer.getPushedAnte();
 
                             out.writeObject(data);
                             out.flush();
