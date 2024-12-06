@@ -135,22 +135,32 @@ public class ThreeCardLogic {
             //only settle ante if dealer's hand is valid
             if(ThreeCardLogic.validDealerHand(theDealer.getDealersHand()))
             {
+                int bet = 0;
+                bet = (2 * p.getAnteBet()) + p.getPushedAnte();
+                p.setPushedAnte(0);
                 switch(ThreeCardLogic.compareHands(theDealer.getDealersHand(), p.getHand())) 
                 {
                     case 0: { //push
                         chat.add(playerToString + " pushes against Dealer");
+                        p.setPushedAnte(bet);
+                        p.setLastestHandWinnings(0);
+                        p.setWonLastHand(0);
                         break;
                     }
                     case 1: { //dealer wins
                         chat.add(addDescription(1,p,playerToString, theDealer));
                         chat.add(playerToString + " loses $" + Integer.toString(p.getAnteBet() + p.getAnteBet()));
-                        p.setTotalWinnings(p.getTotalWinnings() - (p.getAnteBet() + p.getAnteBet()));
+                        p.setTotalWinnings(p.getTotalWinnings() - bet);
+                        p.setLastestHandWinnings(-1*bet);
+                        p.setWonLastHand(1);
                         break;
                     }
                     case 2: { //player wins
                         chat.add(addDescription(0,p,playerToString, theDealer));
                         chat.add(playerToString + " wins $" + Integer.toString(p.getAnteBet() + p.getAnteBet()));
-                        p.setTotalWinnings(p.getTotalWinnings() + (p.getAnteBet() + p.getAnteBet()));
+                        p.setTotalWinnings(p.getTotalWinnings() + bet);
+                        p.setLastestHandWinnings(bet);
+                        p.setWonLastHand(2);
                         break;
                     }
                 }
@@ -159,6 +169,7 @@ public class ThreeCardLogic {
 
             //settle pair plus winnings regardless of dealer's hand
             int ppWinnings = ThreeCardLogic.evalPPWinnings(p.getHand(), p.getPairPlusBet());
+            p.setPairPlusWon(ppWinnings);
             if(ppWinnings != 0) 
             {
                 int handValue = ThreeCardLogic.evalHand(p.getHand());
