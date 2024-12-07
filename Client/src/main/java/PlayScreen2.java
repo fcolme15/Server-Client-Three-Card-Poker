@@ -163,11 +163,10 @@ public class PlayScreen2 implements Initializable{
 
                     Player receivedPlayer = receivedInfo2.getPlayerOne();
                     gameData.getPlayerOne().setHand(receivedPlayer.getHand());
-                    playerOne = receivedPlayer;
 
-                    playerOne.setAnteBet(receivedPlayer.getAnteBet());
-                    playerOne.setPairPlusBet(receivedPlayer.getPairPlusBet());
-                    playerOne.setTotalWinnings(receivedPlayer.getTotalWinnings());
+                    gameData.getPlayerOne().setAnteBet(receivedPlayer.getAnteBet());
+                    gameData.getPlayerOne().setPairPlusBet(receivedPlayer.getPairPlusBet());
+                    gameData.getPlayerOne().setTotalWinnings(receivedPlayer.getTotalWinnings());
 
                     Deck receivedDeck = receivedInfo2.getDealer().getTheDeck();
                     gameData.getDealer().setTheDeck(receivedDeck);
@@ -220,20 +219,22 @@ public class PlayScreen2 implements Initializable{
 
     public void playAnother(ActionEvent e) 
     {
-        try { loadPS1(); } 
+        try { loadPS1(e); } 
         catch(Exception ex) { ex.printStackTrace(); System.exit(1); }
+        playAgainButton.setDisable(true);
+        exitButton.setDisable(true);
     }
 
     public void terminateGame(ActionEvent e) { System.exit(0); }
 
-    public void loadPS1() throws IOException {
+    public void loadPS1(ActionEvent e) throws IOException {
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/PlayScreen1.fxml"));
 
         Parent ps1Root = loader.load(); //load view into parent
         ps1Root.getStylesheets().add(gameData.getStyle(1));
 
-        pause.setOnFinished(e-> {
+        pause.setOnFinished(ex-> {
                 ps2Root.getScene().setRoot(ps1Root);//the scene graph
             }
         );
