@@ -154,13 +154,6 @@ public class Server {
 
                             int winnings = clientPlayer.getLastestHandWinnings() + clientPlayer.getPushedAnte();
                             int whoWon = clientPlayer.getWonLastHand();
-//                            int winnings;
-//                            if (data.getPlayedHand()){
-//                                winnings = 2 * winningsBefore;
-//                            }
-//                            else{
-//                                winnings = winningsBefore;
-//                            }
 
                             if (whoWon == 0){
                                 Platform.runLater(() -> {realStatsList.addAll("Dealer didn't have Queen or higher so client " + count + " pushed: $" + winnings);});
@@ -199,6 +192,8 @@ public class Server {
                             totalWinningsSave[count] = clientPlayer.getTotalWinnings();
                             pushedAnteSave[count] = clientPlayer.getPushedAnte();
 
+                            System.out.println("WINNINGS IN SERVER 15: " + data.getPlayerOne().getTotalWinnings());
+
                             out.writeObject(data);
                             out.flush();
 
@@ -210,6 +205,8 @@ public class Server {
                             System.out.println("IN CASE 17");
                             clientDealer.setDealersHand(null);
                             data.setGameState(18);
+
+                            System.out.println("WINNINGS IN SERVER 17: " + data.getPlayerOne().getTotalWinnings());
 
                             out.writeObject(data);
                             out.flush();
