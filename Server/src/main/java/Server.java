@@ -25,8 +25,6 @@ public class Server {
     public ListView<String> statList = new ListView<>();
     static public ObservableList<String> realClientList = FXCollections.observableArrayList();
     static public ObservableList<String> realStatsList = FXCollections.observableArrayList();
-    private int[] totalWinningsSave = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-    private int[] pushedAnteSave = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
     private int port;
 
@@ -108,7 +106,6 @@ public class Server {
                     PokerInfo data = (PokerInfo)in.readObject();
                     Player clientPlayer = data.getPlayerOne();
                     Dealer clientDealer = data.getDealer();
-                    // String anteBetString = Integer.toString(clientPlayer.getAnteBet());
 
                     System.out.println("TRYING TO READ IN INFOOOO");
 
@@ -122,9 +119,6 @@ public class Server {
                             data.setGameState(12);
 
                             Platform.runLater(() -> {realStatsList.addAll("Client " + count + " is playing another hand");});
-                            //Player player = data.getPlayerOne();
-                            clientPlayer.setTotalWinnings(totalWinningsSave[count]);
-                            clientPlayer.setPushedAnte(pushedAnteSave[count]);
 
                             out.writeObject(data);
                             out.flush();
@@ -147,6 +141,7 @@ public class Server {
                         //    15 -> Server evaluates hands
                         case 15:
                         {
+
                             System.out.println("IN CASE 15");
                             ThreeCardLogic.settlePlayerWinnings(data.getPlayedHand(), data.getPlayerOne(),
                                                         "Player", data.getDealer(), data.getChat());
@@ -165,8 +160,7 @@ public class Server {
                                 Platform.runLater(() -> {realStatsList.addAll("Client " + count + " won: $" + winnings + " from ante wager");});
                             }
                             else if (whoWon == 3){
-                                int lost = clientPlayer.getAnteBet() + clientPlayer.getPairPlusBet();
-                                Platform.runLater(() -> {realStatsList.addAll("Client " + count + " folded and lost: $" + lost + " from ante wager");});
+                                Platform.runLater(() -> {realStatsList.addAll("Client " + count + " folded and lost: $" + winnings + " from ante wager");});
                             }
                             else if (whoWon == 4){
                                 Platform.runLater(() -> {realStatsList.addAll("Game was a draw, client " + count + " pushed: $" + winnings);});
@@ -187,10 +181,13 @@ public class Server {
                                 }
                             }
 
-                            Platform.runLater(() -> {realStatsList.addAll("Client " + count + " currently has $" + clientPlayer.getTotalWinnings() + " earnings");});
-
-                            totalWinningsSave[count] = clientPlayer.getTotalWinnings();
-                            pushedAnteSave[count] = clientPlayer.getPushedAnte();
+                            int totalWinnings = clientPlayer.getTotalWinnings();
+                            if(totalWinnings >= 0){
+                                Platform.runLater(() -> {realStatsList.addAll("Client " + count + " currently has $" + totalWinnings + " earnings");});
+                            }
+                            else{
+                                Platform.runLater(() -> {realStatsList.addAll("Client " + count + " currently has -$" + Math.abs(totalWinnings) + " earnings");});
+                            }
 
                             System.out.println("WINNINGS IN SERVER 15: " + data.getPlayerOne().getTotalWinnings());
 

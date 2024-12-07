@@ -66,7 +66,6 @@ public class ThreeCardLogic {
     }
 
     private static int winner(int dealer, int player){
-        System.out.println("Player " + player + " dealer " + dealer);
         if (dealer > player){
             return 1;
         }
@@ -134,12 +133,12 @@ public class ThreeCardLogic {
         if(playedHand)
         {
             int bet = 0;
-            bet = (2*p.getAnteBet()) + p.getPushedAnte();
+            System.out.println("pushed ante " + p.getPushedAnte());
+            bet = ((2*p.getAnteBet()) + p.getPushedAnte());
             p.setPushedAnte(0);
             //only settle ante if dealer's hand is valid
             if(ThreeCardLogic.validDealerHand(theDealer.getDealersHand()))
             {
-
                 switch(ThreeCardLogic.compareHands(theDealer.getDealersHand(), p.getHand())) 
                 {
                     case 0: { //push
@@ -151,7 +150,7 @@ public class ThreeCardLogic {
                     }
                     case 1: { //dealer wins
                         chat.add(addDescription(1,p,playerToString, theDealer));
-                        chat.add(playerToString + " loses $" + Integer.toString(p.getAnteBet() + p.getAnteBet()));
+                        chat.add(playerToString + " loses $" + Integer.toString(bet));
                         p.setTotalWinnings(p.getTotalWinnings() - (bet));
                         p.setLastestHandWinnings(bet);
                         p.setWonLastHand(1);
@@ -159,7 +158,7 @@ public class ThreeCardLogic {
                     }
                     case 2: { //player wins
                         chat.add(addDescription(0,p,playerToString, theDealer));
-                        chat.add(playerToString + " wins $" + Integer.toString(p.getAnteBet() + p.getAnteBet()));
+                        chat.add(playerToString + " wins $" + Integer.toString(bet));
                         p.setTotalWinnings(p.getTotalWinnings() + (bet));
                         p.setLastestHandWinnings(bet);
                         p.setWonLastHand(2);
@@ -172,7 +171,6 @@ public class ThreeCardLogic {
                 p.setPushedAnte(bet);
                 p.setLastestHandWinnings(0);
                 p.setWonLastHand(0);
-                p.setPushedAnte(0);
             }
 
             //settle pair plus winnings regardless of dealer's hand
@@ -193,12 +191,12 @@ public class ThreeCardLogic {
         else
         {
             //otherwise, player one folded and must lose ante + pair plus (if made)
-            chat.add(playerToString + " folds and loses $" + Integer.toString(p.getAnteBet() + p.getPairPlusBet()));
-            p.setPushedAnte(0);
-            p.setLastestHandWinnings(0);
+            chat.add(playerToString + " folds and loses $" + Integer.toString(p.getAnteBet() + p.getPairPlusBet() + p.getPushedAnte()));
+            p.setLastestHandWinnings(p.getAnteBet() + p.getPairPlusBet() + p.getPushedAnte());
             p.setWonLastHand(3);
             //System.out.println("old " + p.getTotalWinnings() + " change " + (p.getAnteBet() + p.getPairPlusBet()));
-            p.setTotalWinnings(p.getTotalWinnings() - (p.getAnteBet() + p.getPairPlusBet()));
+            p.setTotalWinnings(p.getTotalWinnings() - (p.getAnteBet() + p.getPairPlusBet() + p.getPushedAnte()));
+            p.setPushedAnte(0);
         }
     }
 

@@ -100,14 +100,10 @@ public class PlayScreen2 implements Initializable{
 
     @FXML
     public void foldAction1(ActionEvent e) {
-        //discard hand and lose money
+        //discard hand
         playHand1.setVisible(false);
         foldHand1.setVisible(false);
-        // playedHand1 = false;
         gameData.setPlayedHand(false);
-        //Player player = gameData.getPlayerOne();
-        //player.setWonLastHand(3);
-        //player.setTotalWinnings(player.getTotalWinnings() - (player.getPushedAnte() + player.getAnteBet()));
         evalHands();
     }
 
@@ -167,6 +163,7 @@ public class PlayScreen2 implements Initializable{
                     gameData.getPlayerOne().setAnteBet(receivedPlayer.getAnteBet());
                     gameData.getPlayerOne().setPairPlusBet(receivedPlayer.getPairPlusBet());
                     gameData.getPlayerOne().setTotalWinnings(receivedPlayer.getTotalWinnings());
+                    gameData.getPlayerOne().setPushedAnte(receivedPlayer.getPushedAnte());
 
                     Deck receivedDeck = receivedInfo2.getDealer().getTheDeck();
                     gameData.getDealer().setTheDeck(receivedDeck);
