@@ -1,3 +1,3 @@
-# CS342Proj3
+# Server Client Three Card Poker
 
 lol you read me
